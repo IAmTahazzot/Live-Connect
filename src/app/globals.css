@@ -5,8 +5,9 @@
 @layer base {
   :root {
     /* Altering color schema to hsl for better useability */
-    --background-card: 223, 7%, 21%;
+    --background-primary: 223, 7%, 21%;
     --background-deep-dark: 225, 6%, 13%;
+    --background-modifier-selected: 228 calc(1 * 6%) 32.5% / 0.6;
 
     /* Previous schema */
     --background-toolbar: #1e1f22;
