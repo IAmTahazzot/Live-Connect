@@ -7,6 +7,7 @@ import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import ModalProvider from '@/components/providers/modal-provider'
 import SocketProvider from '@/components/providers/socket-provider'
 import { QueryProvider } from '@/components/providers/query-provider'
+import { PanelProvider } from '@/components/providers/panel-provider'
 
 export const metadata: Metadata = {
   title: 'LC (Live Connect)',
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ThemeProvider attribute={'class'} defaultTheme={'dark'} enableSystem={false} storageKey={'__THEME'}>
             <SocketProvider>
               <ModalProvider />
+              <PanelProvider />
               <QueryProvider>{children}</QueryProvider>
             </SocketProvider>
           </ThemeProvider>

@@ -6,6 +6,7 @@
   :root {
     /* Altering color schema to hsl for better useability */
     --background-primary: 223, 7%, 21%;
+    --background-secondary: 220, 7%, 18%;
     --background-deep-dark: 225, 6%, 13%;
     --background-modifier-selected: 228 calc(1 * 6%) 32.5%;
 
