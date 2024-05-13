@@ -1,9 +1,10 @@
 import { NavigationSidebar } from '@/components/navigation/navigation-sidebar'
+import { cn } from '@/lib/utils'
 import React from 'react'
 
 export default function ServersLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className={'h-full'}>
+    <div className={cn('h-full')} id='server'>
       <div className={'hidden md:flex h-full w-[72px] z-30 flex-col fixed inset-y-0'}>
         <NavigationSidebar />
       </div>
