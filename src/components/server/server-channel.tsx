@@ -39,13 +39,13 @@ export const ServerChannel = ({ channel, server, role }: ServerChannelProps) => 
     <button
       onClick={onClick}
       className={cn(
-        'group px-2 py-1 rounded-sm flex items-center gap-x-2 w-full hover:bg-gray-700/10 dark:hover:bg-[hsl(var(--background-modifier-selected)/.3)] transition mb-1',
+        'grid grid-cols-[24px_auto_auto] items-center group px-2 py-1 rounded-sm gap-x-1 w-full hover:bg-gray-700/10 dark:hover:bg-[hsl(var(--background-modifier-selected)/.3)] transition mb-1',
         params?.channelId === channel.id && 'bg-gray-700/20 dark:bg-[hsl(var(--background-modifier-selected)/.6)]'
       )}>
       <Icon className="flex-shrink-0 w-5 h-5 text-gray-500 dark:text-gray-400" />
       <p
         className={cn(
-          'font-normal text-base text-gray-500 group-hover:text-gray-600 dark:text-gray-400 dark:group-hover:text-gray-300 transition',
+          'text-ellipsis whitespace-nowrap overflow-hidden font-normal text-base text-left text-gray-500 group-hover:text-gray-600 dark:text-gray-400 dark:group-hover:text-gray-300 transition',
           params?.channelId === channel.id && 'text-primary dark:text-white dark:group-hover:text-white font-semibold'
         )}>
         {channel.name}
