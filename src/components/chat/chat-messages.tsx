@@ -10,6 +10,7 @@ import ChatItem from '@/components/chat/chat-item'
 import { format } from 'date-fns'
 import { useChatSocket } from '@/hooks/use-chat-socket'
 import { useChatScroll } from '@/components/chat/use-chat-scroll'
+import { ChatDispatchLoader } from '../loader/chat-dispatch-loader'
 const DATE_FORMAT = 'd MMM yyyy, HH:mm'
 type MessageWithMemberWithProfile = Message & {
   member: Member & {
@@ -47,6 +48,7 @@ const ChatMessages = ({
   const chatRef = useRef<ElementRef<'div'>>(null)
   const bottomRef = useRef<ElementRef<'div'>>(null)
   let prevMessage: MessageWithMemberWithProfile | null = null
+  const dynamicLoaderCount = Math.floor(Math.random() * 10 + 5)
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useChatQuery({
     queryKey,
@@ -70,17 +72,20 @@ const ChatMessages = ({
   })
 
   if (status === 'loading') {
+    const dynamicLoaderCount = Math.floor(Math.random() * 10 + 5)
+
     return (
-      <div className={'flex flex-col flex-1 justify-center items-center'}>
-        <ImSpinner9 className={'animate-spin text-2xl text-gray-500 dark:text-gray-400 my-4'} />
-        <p className="text-zinc-500 dark:text-zinc-400">Loading...</p>
+      <div className="self-end px-4 h-full overflow-y-auto">
+        {Array.from({ length: dynamicLoaderCount }).map((_, i) => (
+          <ChatDispatchLoader key={i} />
+        ))}
       </div>
     )
   }
 
   if (status === 'error') {
     return (
-      <div className="flex flex-col flex-1 justify-center items-center">
+      <div className="self-end px-4 h-full py-4 flex flex-col justify-center items-center">
         <LuServerCrash className="h-7 w-7 text-zinc-500 my-4" />
         <p className="text-zinc-500 dark:text-zinc-400">Something went wrong!</p>
       </div>
@@ -88,20 +93,27 @@ const ChatMessages = ({
   }
 
   return (
-    <div ref={chatRef} className={'flex-1 flex flex-col py-4 overflow-y-auto'}>
+    <div ref={chatRef} className={'self-end grid items-end grid-rows-[1fr,auto] h-full py-4 overflow-y-auto'}>
       <div className={'mt-auto'}>
         {!hasNextPage && <ChatWelcome type={type} name={name} />}
 
         {isFetchingNextPage && (
-          <div className={'flex justify-center items-center'}>
-            <ImSpinner9 className={'animate-spin text-2xl text-gray-500 dark:text-gray-400 my-4'} />
+          <div className="self-end px-4 h-full overflow-y-auto">
+            {Array.from({ length: dynamicLoaderCount }).map((_, i) => (
+              <ChatDispatchLoader key={i} />
+            ))}
           </div>
         )}
 
         {!isFetchingNextPage && hasNextPage && (
-          <button onClick={() => fetchNextPage()} className={'mx-auto my-5 text-sm block'}>
-            load previous messages
-          </button>
+          <div
+            className="self-end px-4 h-full overflow-y-auto"
+            onMouseEnter={() => {
+              fetchNextPage()
+            }}>
+            <ChatDispatchLoader />
+            <ChatDispatchLoader />
+          </div>
         )}
 
         <div className={'flex flex-col-reverse mt-auto'}>

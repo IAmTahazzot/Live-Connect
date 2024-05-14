@@ -47,7 +47,7 @@ export default async function MemberIdPage({ params }: MemberIdPageProps) {
     const otherMember = memberOne.id === currentMember.id ? memberTwo : memberOne
 
     return (
-        <div className={'bg-white dark:bg-[#313338] flex flex-col h-full'}>
+        <div className={'grid grid-rows-[50px,1fr,auto] bg-white dark:bg-[#313338] h-full'}>
             <ChatHeader
                 imageUrl={otherMember.profile.imageUrl}
                 type={'conversation'}
