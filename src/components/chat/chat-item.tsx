@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Member, MemberRole, Profile } from '@prisma/client'
 import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from 'lucide-react'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 
 import { UserAvatar } from '@/components/user-avatar'
@@ -32,6 +32,7 @@ interface ChatItemProps {
   isUpdated: boolean
   socketUrl: string
   socketQuery: Record<string, string>
+  isRapid?: boolean
 }
 
 const roleIconMap = {
@@ -55,6 +56,7 @@ const ChatItem = ({
   isUpdated,
   socketUrl,
   socketQuery,
+  isRapid = false,
 }: ChatItemProps) => {
   const [isEditing, setIsEditing] = useState(false)
   const { onOpen } = useModal()
@@ -121,13 +123,17 @@ const ChatItem = ({
   const isImage = !isPDF && fileUrl
 
   return (
-    <div className="relative group flex items-center hover:bg-[#2e3035] p-4 transition w-full">
-      <div className="group flex gap-x-2 items-start w-full">
-        <div onClick={onMemberClick} className="cursor-pointer hover:drop-shadow-md transition">
-          <UserAvatar src={member.profile.imageUrl} />
+    <div
+      className={cn(
+        'relative group flex items-center hover:bg-[#2e3035] transition w-full px-4',
+        isRapid ? 'py-[2px]' : 'py-1 mt-7'
+      )}>
+      <div className="grid grid-cols-[40px,1fr] gap-x-4 group items-start w-full">
+        <div onClick={onMemberClick} className={cn('cursor-pointer hover:drop-shadow-md transition')}>
+          <UserAvatar src={member.profile.imageUrl} className={`${isRapid && 'hidden'}`} />
         </div>
-        <div className="flex flex-col w-full">
-          <div className="flex items-center gap-x-2">
+        <div className={cn('flex flex-col w-full')}>
+          <div className={cn('items-center gap-x-3', isRapid ? 'hidden' : 'flex')}>
             <div className="flex items-center">
               <p onClick={onMemberClick} className="font-semibold text-sm hover:underline cursor-pointer">
                 {member.profile.name}
@@ -136,6 +142,7 @@ const ChatItem = ({
             </div>
             <span className="text-[12px] text-zinc-500 dark:text-zinc-400">{timestamp}</span>
           </div>
+
           {isImage && (
             <a
               href={fileUrl}
@@ -160,7 +167,7 @@ const ChatItem = ({
           {!fileUrl && !isEditing && (
             <p
               className={cn(
-                'text-sm text-zinc-600 dark:text-zinc-300',
+                'text-zinc-600 dark:text-zinc-300',
                 deleted && 'italic text-zinc-500 dark:text-zinc-400 text-xs mt-1'
               )}>
               {content}
@@ -199,6 +206,7 @@ const ChatItem = ({
           )}
         </div>
       </div>
+
       {canDeleteMessage && (
         <div className="hidden group-hover:flex items-center gap-x-2 absolute p-1 -top-2 right-5 bg-white dark:bg-[#242629] border border-[#242629] rounded-sm">
           {canEditMessage && (

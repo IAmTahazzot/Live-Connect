@@ -5,7 +5,7 @@ import ChatWelcome from '@/components/chat/chat-welcome'
 import { useChatQuery } from '@/hooks/use-chat-query'
 import { ImSpinner9 } from 'react-icons/im'
 import { LuServerCrash } from 'react-icons/lu'
-import { ElementRef, Fragment, useRef } from 'react'
+import { ElementRef, Fragment, useRef, useState } from 'react'
 import ChatItem from '@/components/chat/chat-item'
 import { format } from 'date-fns'
 import { useChatSocket } from '@/hooks/use-chat-socket'
@@ -46,6 +46,7 @@ const ChatMessages = ({
 
   const chatRef = useRef<ElementRef<'div'>>(null)
   const bottomRef = useRef<ElementRef<'div'>>(null)
+  let prevMessage: MessageWithMemberWithProfile | null = null
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useChatQuery({
     queryKey,
@@ -59,6 +60,7 @@ const ChatMessages = ({
     addKey,
     updateKey,
   })
+
   useChatScroll({
     chatRef,
     bottomRef,
@@ -103,10 +105,31 @@ const ChatMessages = ({
         )}
 
         <div className={'flex flex-col-reverse mt-auto'}>
-          {data?.pages.map((page, i) =>
-            page ? (
+          {data?.pages.map((page, i) => {
+            console.log(page && page.items)
+
+            return page ? (
               <Fragment key={i}>
                 {page.items.map((message: MessageWithMemberWithProfile) => {
+                  let isRapid = false
+                  // console.log(prevMessage)
+
+                  if (prevMessage && prevMessage.memberId === message.memberId) {
+                    // same member as previous message
+                    const prevMessageDate = new Date(prevMessage.createdAt)
+                    const messageDate = new Date(message.createdAt)
+                    const differenceInSeconds = Math.abs(messageDate.getTime() - prevMessageDate.getTime()) / 1000
+
+                    if (differenceInSeconds < 60) {
+                      isRapid = true
+                    }
+
+                    console.log(prevMessageDate, messageDate)
+                    prevMessage = message
+                  } else {
+                    prevMessage = message
+                  }
+
                   return (
                     <ChatItem
                       key={message.id}
@@ -120,6 +143,7 @@ const ChatMessages = ({
                       isUpdated={message.updatedAt !== message.createdAt}
                       socketUrl={socketUrl}
                       socketQuery={socketQuery}
+                      isRapid={isRapid}
                     />
                   )
                 })}
@@ -129,7 +153,7 @@ const ChatMessages = ({
                 Something went terribly wrong, please refresh the page
               </div>
             )
-          )}
+          })}
         </div>
       </div>
 
