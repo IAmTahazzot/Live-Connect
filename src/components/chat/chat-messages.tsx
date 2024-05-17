@@ -11,7 +11,7 @@ import { format } from 'date-fns'
 import { useChatSocket } from '@/hooks/use-chat-socket'
 import { useChatScroll } from '@/components/chat/use-chat-scroll'
 import { ChatDispatchLoader } from '../loader/chat-dispatch-loader'
-const DATE_FORMAT = 'd MMM yyyy, HH:mm'
+
 type MessageWithMemberWithProfile = Message & {
   member: Member & {
     profile: Profile
@@ -47,6 +47,7 @@ const ChatMessages = ({
 
   const chatRef = useRef<ElementRef<'div'>>(null)
   const bottomRef = useRef<ElementRef<'div'>>(null)
+  let sameUserMessageBucket: MessageWithMemberWithProfile[] = []
   let prevMessage: MessageWithMemberWithProfile | null = null
   const dynamicLoaderCount = Math.floor(Math.random() * 10 + 5)
 
@@ -92,6 +93,39 @@ const ChatMessages = ({
     )
   }
 
+  const renderMessageBucket = (bucketDispatch: MessageWithMemberWithProfile[]) => {
+    const bucketDispatchSorted = bucketDispatch.sort((a, b) => {
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    })
+
+    return (
+      <div key={Math.random().toString()} className="bucket-list">
+        {bucketDispatchSorted.map((message, index) => {
+          const DATE_FORMAT = 'd MMM yyyy, HH:mm'
+          const date = new Date(message.createdAt)
+          const formattedDate = format(date, DATE_FORMAT)
+
+          return (
+            <ChatItem
+              key={index}
+              id={message.id}
+              currentMember={member}
+              member={message.member}
+              content={message.content}
+              fileUrl={message.fileUrl}
+              deleted={message.deleted}
+              timestamp={formattedDate}
+              isUpdated={message.updatedAt !== message.createdAt}
+              socketUrl={socketUrl}
+              socketQuery={socketQuery}
+              isRapid={index !== 0}
+            />
+          )
+        })}
+      </div>
+    )
+  }
+
   return (
     <div ref={chatRef} className={'self-end grid items-end grid-rows-[1fr,auto] h-full py-4 overflow-y-auto'}>
       <div className={'mt-auto'}>
@@ -118,46 +152,47 @@ const ChatMessages = ({
 
         <div className={'flex flex-col-reverse mt-auto'}>
           {data?.pages.map((page, i) => {
-            console.log(page && page.items)
+            const length = page?.items.length
 
             return page ? (
               <Fragment key={i}>
-                {page.items.map((message: MessageWithMemberWithProfile) => {
-                  let isRapid = false
-                  // console.log(prevMessage)
+                {page.items.map((message: MessageWithMemberWithProfile, index: number) => {
+                  if (!prevMessage) {
+                    // initial message
+                    prevMessage = message
+                  }
 
-                  if (prevMessage && prevMessage.memberId === message.memberId) {
-                    // same member as previous message
+                  const isSameUser = prevMessage.memberId === message.memberId
+
+                  if (isSameUser) {
                     const prevMessageDate = new Date(prevMessage.createdAt)
                     const messageDate = new Date(message.createdAt)
                     const differenceInSeconds = Math.abs(messageDate.getTime() - prevMessageDate.getTime()) / 1000
 
                     if (differenceInSeconds < 60) {
-                      isRapid = true
+                      sameUserMessageBucket.push(message)
+
+                      if (index === length - 1) {
+                        const bucketMessagesDOM = renderMessageBucket(sameUserMessageBucket)
+                        sameUserMessageBucket = []
+                        return bucketMessagesDOM
+                      }
+                    } else {
+                      const bucketMessagesDOM = renderMessageBucket(sameUserMessageBucket)
+                      sameUserMessageBucket = []
+                      sameUserMessageBucket.push(message)
+                      return bucketMessagesDOM
                     }
 
-                    console.log(prevMessageDate, messageDate)
                     prevMessage = message
                   } else {
                     prevMessage = message
-                  }
+                    const bucketMessagesDOM = renderMessageBucket(sameUserMessageBucket)
+                    sameUserMessageBucket = []
+                    sameUserMessageBucket.push(message)
 
-                  return (
-                    <ChatItem
-                      key={message.id}
-                      id={message.id}
-                      currentMember={member}
-                      member={message.member}
-                      content={message.content}
-                      fileUrl={message.fileUrl}
-                      deleted={message.deleted}
-                      timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
-                      isUpdated={message.updatedAt !== message.createdAt}
-                      socketUrl={socketUrl}
-                      socketQuery={socketQuery}
-                      isRapid={isRapid}
-                    />
-                  )
+                    return bucketMessagesDOM
+                  }
                 })}
               </Fragment>
             ) : (
