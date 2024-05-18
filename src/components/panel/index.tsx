@@ -3,10 +3,34 @@
 import { usePanel } from '@/hooks/use-panel'
 import { cn } from '@/lib/utils'
 import { useEffect, useState } from 'react'
+import { PanelProfile } from './panel-profile'
+import { PanelAccount } from './panel-account'
 
 export const Panel = () => {
   const [unmount, setUnmount] = useState(false)
   const { isOpen, close } = usePanel()
+  const [activeTab, setActiveTab] = useState<{
+    name: string
+    component: React.ReactNode
+  }>({
+    name: 'My Account',
+    component: <div></div>,
+  })
+
+  const navigations = [
+    {
+      name: 'My Account',
+      component: <PanelAccount setActiveTab={setActiveTab} />,
+    },
+    {
+      name: 'Profile',
+      component: <PanelProfile />,
+    },
+  ]
+
+  useEffect(() => {
+    setActiveTab(navigations[0])
+  }, [])
 
   const closePanel = () => {
     setUnmount(true)
@@ -67,17 +91,33 @@ export const Panel = () => {
         unmount && 'anim-scale-up-and-fade'
       )}>
       <div className="flex h-full">
-        <div className="flex-[1_0_220px] bg-[hsl(var(--background-secondary))]">
+        <div className="flex-[1_0_240px] bg-[hsl(var(--background-secondary))]">
           <div className="flex flex-[1_0_auto] justify-end h-full">
-            <nav className="flex flex-col w-[220px] h-full overflow-y-auto py-16 px-4">
-              <h3 className="uppercase text-sm">Settings</h3>
+            <nav className="flex flex-col w-[220px] h-full overflow-y-auto py-16 px-4 gap-2">
+              {navigations.map((nav, index) => (
+                <button
+                  key={index}
+                  className={cn(
+                    'flex items-center h-8 w-full p-2 text-base font-medium text-left rounded-sm hover:bg-[hsl(var(--background-modifier-selected)/.4)] hover:cursor-pointer transition-colors duration-200 ease-in-out',
+                    activeTab.name === nav.name &&
+                      'text-[hsl(var(--text-primary))] bg-[hsl(var(--background-modifier-selected)/.6)]',
+                    activeTab.name !== nav.name && 'text-gray-400'
+                  )}
+                  onClick={() => setActiveTab(nav)}>
+                  {nav.name}
+                </button>
+              ))}
             </nav>
           </div>
         </div>
         <div className="flex-[1_1_800px] bg-[hsl(var(--background-primary))]">
-          <div className="flex h-full">
-            <div className="flex-1 max-w-[740px] py-16 px-10">Hello from the other side</div>
-            <div className="py-16">
+          <div
+            className="flex h-full"
+            style={{
+              overflow: 'hidden auto',
+            }}>
+            <div className="flex-1 max-w-[740px] py-16 px-10">{activeTab.component}</div>
+            <div className="py-16 text-center hover:opacity-50">
               <button
                 className="flex items-center justify-center border-2 rounded-full h-9 w-9 border-gray-400 border-solid"
                 onClick={closePanel}>
@@ -87,6 +127,7 @@ export const Panel = () => {
                     d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
                 </svg>
               </button>
+              <span className="font-medium text-sm block mt-1 text-gray-300 uppercase">Esc</span>
             </div>
           </div>
         </div>
