@@ -54,14 +54,15 @@ const InitialModal = () => {
   useEffect(() => {
     form.setFocus('name')
   }, [form])
+
   if (!mounted) return null
 
   return (
     <Dialog open>
-      <DialogContent className="bg-white text-black p-0 overflow-hidden max-w-[440px] rounded-[5px] dark:bg-chat">
+      <DialogContent className="bg-[hsl(var(--background-primary))] text-white p-0 overflow-hidden max-w-[440px] rounded-[5px] dark:bg-chat">
         <DialogHeader className="pt-5 px-4">
           <DialogTitle className="text-2xl text-center font-bold">Customize your server</DialogTitle>
-          <DialogDescription className="text-center text-base text-zinc-600">
+          <DialogDescription className="text-center text-sm text-gray-200">
             Give your server a personality with a name and an image. You can always change it later.
           </DialogDescription>
         </DialogHeader>
@@ -86,19 +87,16 @@ const InitialModal = () => {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
-                      Server name
-                    </FormLabel>
+                    <FormLabel className="uppercase text-xs font-semidbol text-gray-400">Server name</FormLabel>
                     <FormControl>
                       <Input
                         disabled={isLoading}
-                        className="bg-input rounded-[3px] border-0 focus-visible:ring-0 text-zinc-700 focus-visible:ring-offset-0 font-medium text-base"
+                        className="bg-input rounded-[3px] border-0 focus-visible:ring-0 text-gray-100 focus-visible:ring-offset-0 font-medium text-base"
                         {...field}
                       />
                     </FormControl>
                     <p className={'text-[11px] font-sans'}>
-                      {/* eslint-disable-next-line react/no-unescaped-entities */}
-                      <span className={'text-zinc-600'}>By creating a server, you agree to Discord's </span>
+                      <span className={'text-zinc-400'}>By creating a server, you agree to Discord&apos;s </span>
                       <Link href={'/'} className={'text-sky-500 font-[600]'}>
                         Community Guidelines
                       </Link>
@@ -107,7 +105,7 @@ const InitialModal = () => {
                 )}
               />
             </div>
-            <DialogFooter className="bg-gray-100 px-4 py-3 justify-between">
+            <DialogFooter className="bg-[hsl(var(--background-deep-dark),.6)] px-4 py-3 justify-between">
               <Button
                 type={'button'}
                 onClick={() => close()}

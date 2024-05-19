@@ -20,7 +20,7 @@ const Home = async () => {
     return redirect(`/servers/${server.id}`)
   }
 
-  return <InitialModal />
+  return redirect(`/me`)
 }
 
 export default Home
