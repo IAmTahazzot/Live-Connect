@@ -531,11 +531,10 @@ textarea:-webkit-autofill:hover {
   }
 }
 
-
 /* 
   custom scrollbar
 */
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   width: 13px;
   background-color: #2b2d31;
   border-radius: 13px;
@@ -545,4 +544,37 @@ textarea:-webkit-autofill:hover {
   background-color: #1a1b1e;
   border-radius: 13px;
   border: 3px solid #2b2d31;
+}
+
+/**
+loader
+*/
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 9px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: l5 1s infinite linear alternate;
+}
+@keyframes l5 {
+  0% {
+    box-shadow: 12px 0 #fff, -12px 0 #fff2;
+    background: #fff;
+  }
+  33% {
+    box-shadow: 12px 0 #fff, -12px 0 #fff2;
+    background: #fff2;
+  }
+  66% {
+    box-shadow: 12px 0 #fff2, -12px 0 #fff;
+    background: #fff2;
+  }
+  100% {
+    box-shadow: 12px 0 #fff2, -12px 0 #fff;
+    background: #fff;
+  }
+}
+
+#profilePreview {
+  box-shadow: -6px 4px 12px #232428db;
 }

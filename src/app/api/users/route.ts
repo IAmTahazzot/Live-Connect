@@ -27,3 +27,44 @@ export const GET = async (req: Request) => {
     },
   })
 }
+
+export const PATCH = async (req: Request) => {
+  const loggedInUser = await currentUser()
+
+  if (!loggedInUser) {
+    return NextResponse.json({
+      status: 401,
+      body: {
+        message: 'Unauthorized',
+      },
+    })
+  }
+
+  const { name, bio } = await req.json()
+
+  if (!name && !bio) {
+    return NextResponse.json({
+      status: 400,
+      body: {
+        message: 'Name or bio is required',
+      },
+    })
+  }
+
+  const data = await db.profile.update({
+    where: {
+      userId: loggedInUser.id,
+    },
+    data: {
+      name,
+      bio,
+    },
+  })
+
+  return NextResponse.json({
+    status: 200,
+    body: {
+      data,
+    },
+  })
+}

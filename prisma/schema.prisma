@@ -3,16 +3,18 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL") // uses connection pooling
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // uses connection pooling
 }
 
 model Profile {
-  id       String @id @default(uuid())
-  userId   String @unique
+  id       String  @id @default(uuid())
+  userId   String  @unique
   name     String
-  imageUrl String @db.Text
-  email    String @db.Text
+  username String? @unique
+  bio      String? @db.Text
+  imageUrl String  @db.Text
+  email    String  @db.Text
 
   servers  Server[]
   members  Member[]
