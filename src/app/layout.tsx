@@ -8,6 +8,7 @@ import ModalProvider from '@/components/providers/modal-provider'
 import SocketProvider from '@/components/providers/socket-provider'
 import { QueryProvider } from '@/components/providers/query-provider'
 import { PanelProvider } from '@/components/providers/panel-provider'
+import { Toaster } from '@/components/ui/sonner'
 
 export const metadata: Metadata = {
   title: 'LC (Live Connect)',
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <SocketProvider>
               <ModalProvider />
               <PanelProvider />
+              <Toaster />
               <QueryProvider>{children}</QueryProvider>
             </SocketProvider>
           </ThemeProvider>

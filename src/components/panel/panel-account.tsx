@@ -6,6 +6,7 @@ import { Hash } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { PanelProfile } from './panel-profile'
+import { toast } from 'sonner'
 
 type PanelAccountProps = {
   setActiveTab: React.Dispatch<React.SetStateAction<{ name: string; component: React.ReactNode }>>
@@ -13,6 +14,8 @@ type PanelAccountProps = {
 
 export const PanelAccount = ({ setActiveTab }: PanelAccountProps) => {
   const [user, setUser] = useState<Profile>()
+  const [deleteAccount, setDeleteAccount] = useState<boolean>(false)
+  const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
   useEffect(() => {
     const getUser = async () => {
@@ -155,10 +158,51 @@ export const PanelAccount = ({ setActiveTab }: PanelAccountProps) => {
           able to recover it.
         </p>
 
-        <button className="text-sm font-medium bg-red-500 rounded-sm h-8 flex items-center justify-center text-white hover:bg-red-600 transition-colors duration-200 px-4 cursor-pointer my-4">
+        <button
+          className="text-sm font-medium bg-red-500 rounded-sm h-8 flex items-center justify-center text-white hover:bg-red-600 transition-colors duration-200 px-4 cursor-pointer my-4"
+          onClick={() => setDeleteAccount(true)}>
           Delete Account
         </button>
       </div>
+
+      {deleteAccount && (
+        <div className="bg-black/50 fixed top-0 left-0 w-full h-full grid place-items-center">
+          <div
+            className="max-w-[500px] bg-[hsl(var(--background-primary))] rounded-sm overflow-hidden"
+            id="deleteAccountModal">
+            <div className="p-6">
+              <h1 className="text-xl font-medium mb-2 uppercase">You&apos;ll lose everything!</h1>
+              <p>Your account, servers, files everything will be erased and is not recoverable!</p>
+            </div>
+
+            <div className="flex justify-end items-center gap-x-2 mt-6 px-6 py-3 bg-[hsl(var(--background-deep-dark),.6)]">
+              <button
+                className="text-sm font-medium rounded-sm h-8 flex items-center justify-center text-white px-4 cursor-pointer"
+                onClick={() => setDeleteAccount(false)}>
+                Cancel
+              </button>
+              <button
+                className="text-sm font-medium bg-red-500 rounded-sm h-8 flex items-center justify-center text-white hover:bg-red-600 transition-colors duration-200 px-4 cursor-pointer"
+                onClick={() => {
+                  setIsDeleting(true)
+                  fetch('/api/users/', {
+                    method: 'DELETE',
+                  })
+                    .then(() => {
+                      setIsDeleting(false)
+                      toast.success('Account deleted successfully')
+                      window.location.href = '/'
+                    })
+                    .catch(() => {
+                      toast.info('Failed to delete account')
+                    })
+                }}>
+                {isDeleting ? <div className="loader"></div> : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

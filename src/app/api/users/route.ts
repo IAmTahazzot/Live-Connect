@@ -68,3 +68,29 @@ export const PATCH = async (req: Request) => {
     },
   })
 }
+
+export const DELETE = async (req: Request) => {
+  const loggedInUser = await currentUser()
+
+  if (!loggedInUser) {
+    return NextResponse.json({
+      status: 401,
+      body: {
+        message: 'Unauthorized',
+      },
+    })
+  }
+
+  const data = await db.profile.delete({
+    where: {
+      userId: loggedInUser.id,
+    },
+  })
+
+  return NextResponse.json({
+    status: 200,
+    body: {
+      data,
+    },
+  })
+}

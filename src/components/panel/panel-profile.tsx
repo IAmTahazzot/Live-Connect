@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import { z } from 'zod'
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { toast } from 'sonner'
 
 const profileFormSchema = z.object({
   name: z
@@ -75,12 +76,14 @@ export const PanelProfile = () => {
       const result = await response.json()
 
       if (response.status === 401) {
-        alert('Unauthorized')
+        toast.error('Unauthorized')
         return
       }
 
       if (response.status === 200) {
-        alert('Profile updated successfully')
+        toast.success('Profile updated successfully', {
+          position: 'bottom-right',
+        })
       }
     } catch (error) {
       alert('An error occurred, please refresh the page or try again later.')
@@ -138,7 +141,7 @@ export const PanelProfile = () => {
                 </div>
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger className='-translate-y-6'>
+                    <TooltipTrigger className="-translate-y-6">
                       <div className="bg-[#111214] p-[6px] rounded-md">
                         <div className="bg-emerald-500 h-4 w-4 rounded-full flex items-center justify-center">
                           <Hash size={12} className="text-black" />

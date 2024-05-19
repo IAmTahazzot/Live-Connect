@@ -578,3 +578,17 @@ loader
 #profilePreview {
   box-shadow: -6px 4px 12px #232428db;
 }
+
+#deleteAccountModal {
+  animation: bounce-up 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  transform: scale(1);
+}
+
+@keyframes bounce-up {
+  from {
+    transform: scale(0.9);
+  }
+  to {
+    transform: scale(1);
+  }
+}
