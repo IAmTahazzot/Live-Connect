@@ -38,7 +38,11 @@ export const ExplorePublicServer = () => {
     fetchServer()
   }, [])
 
-  if (!serverCollection || !userServerCollection || !hydrated) {
+  if (!hydrated) {
+    return null
+  }
+
+  if (!serverCollection || !userServerCollection) {
     return <Loader />
   }
 
