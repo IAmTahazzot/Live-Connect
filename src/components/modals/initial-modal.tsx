@@ -96,7 +96,7 @@ const InitialModal = () => {
                       />
                     </FormControl>
                     <p className={'text-[11px] font-sans'}>
-                      <span className={'text-zinc-400'}>By creating a server, you agree to Discord&apos;s </span>
+                      <span className={'text-gray-400'}>By creating a server, you agree to Discord&apos;s </span>
                       <Link href={'/'} className={'text-sky-500 font-[600]'}>
                         Community Guidelines
                       </Link>

@@ -32,8 +32,11 @@ export const NavigationItem = ({ id, imageUrl, name }: NavigationItemProps) => {
         />
         <div
           className={cn(
-            'relative group flex items-center justify-center mx-3 h-[48px] w-[48px] rounded-[24px] group-hover:rounded-[16px] transition-all overflow-hidden bg-white dark:bg-[--background-chat] group-hover:bg-[--background-hover] group-hover:text-white',
-            params?.serverId === id && 'rounded-[16px] bg-[--background-hover] dark:bg-[--background-hover] text-white'
+            'relative group flex items-center justify-center mx-3 h-[48px] w-[48px] rounded-[24px] group-hover:rounded-[16px] transition-all overflow-hidden',
+            !imageUrl &&
+              'bg-white dark:bg-[--background-chat] group-hover:bg-[--background-hover] group-hover:text-white',
+            params?.serverId === id && 'rounded-[16px]',
+            params?.serverId === id && !imageUrl && 'bg-[--background-hover] dark:bg-[--background-hover] text-white'
           )}>
           {!imageUrl ? (
             <span className={'font-medium'}>

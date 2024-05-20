@@ -1,6 +1,5 @@
 'use client'
 
-import { useUser } from '@clerk/nextjs'
 import { Profile } from '@prisma/client'
 import { Hash } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -184,6 +183,8 @@ export const PanelAccount = ({ setActiveTab }: PanelAccountProps) => {
               <button
                 className="text-sm font-medium bg-red-500 rounded-sm h-8 flex items-center justify-center text-white hover:bg-red-600 transition-colors duration-200 px-4 cursor-pointer"
                 onClick={() => {
+
+                  // FIX: Remind user to transfer ownership of servers before deleting account
                   setIsDeleting(true)
                   fetch('/api/users/', {
                     method: 'DELETE',
