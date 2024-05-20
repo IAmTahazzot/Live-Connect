@@ -12,7 +12,11 @@ export async function GET(req: Request) {
   try {
     const servers = await db.server.findMany({
       where: {
-        profileId: profile.id,
+        members: {
+          some: {
+            profileId: profile.id,
+          },
+        },
       },
     })
 

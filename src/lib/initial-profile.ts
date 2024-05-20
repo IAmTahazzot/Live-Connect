@@ -22,9 +22,10 @@ const InitialProfile = async () => {
   const newProfile = await db.profile.create({
     data: {
       userId: user.id,
-      name: `${user.firstName || 'user-' + user.id} ${user.lastName || ''}`.trim(),
+      name: `${user.firstName || user.emailAddresses[0].emailAddress.split('@')[0]} ${user.lastName || ''}`.trim(),
       imageUrl: user.imageUrl,
       email: user.emailAddresses[0].emailAddress,
+      username: user.username,
     },
   })
 

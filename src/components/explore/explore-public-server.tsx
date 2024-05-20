@@ -42,15 +42,11 @@ export const ExplorePublicServer = () => {
     return null
   }
 
-  if (!serverCollection || !userServerCollection) {
-    return <Loader />
-  }
-
   const filteredServers = serverCollection.filter(server =>
     server.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  if (filteredServers.length === 0) {
+  if (serverCollection.length === 0) {
     // BUG: I know this is a bug, but I'm not fixing it. (Hint: Server will always return something :D)
     return <Loader />
   }
@@ -63,9 +59,13 @@ export const ExplorePublicServer = () => {
 
     // check if this server is already joined by the user
     const isUserJoined = joinedServers.some(userServer => userServer.id === server.id)
+    console.log('-------')
+    console.log(isUserJoined)
+    console.log('j', joinedServers)
+    console.log('us', userServerCollection)
+    console.log('s', serverCollection)
 
     if (isUserJoined) {
-      router.refresh()
       router.push(`/servers/${server.id}`)
     } else {
       try {
@@ -87,11 +87,11 @@ export const ExplorePublicServer = () => {
   }
 
   return (
-    <div className="max-w-[1200px] mx-auto px-8 py-6">
+    <div className="max-w-[1200px] mx-auto px-8 py-6 overflow-y-auto h-full">
       <div className="relative grid place-items-center h-[300px] w-full rounded-md overflow-hidden mb-8">
         <div className="absolute z-10 w-4/6 p-10">
           <h1 className="text-center mb-4 text-2xl font-semibold">
-            Those aren&apos;t servers, they&apos;re communities.
+            Those aren&apos;t servers, those are communities.
           </h1>
           <input
             type="text"

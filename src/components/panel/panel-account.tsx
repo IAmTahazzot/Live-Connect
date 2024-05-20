@@ -137,7 +137,7 @@ export const PanelAccount = ({ setActiveTab }: PanelAccountProps) => {
               </div>
               <div className="space-y-1">
                 <h2 className="uppercase font-semibold text-gray-400 text-xs tracking-wide">Username</h2>
-                <h2>{user.email.split('@')[0].toLowerCase()}</h2>
+                <h2>{user.username}</h2>
               </div>
               <div className="space-y-1">
                 <h2 className="uppercase font-semibold text-gray-400 text-xs tracking-wide">E-mail</h2>

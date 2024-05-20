@@ -157,7 +157,7 @@ export const PanelProfile = () => {
 
               <div className="bg-[#111214] rounded-[6px] p-4 mb-6">
                 <h2 className="text-[20px] font-semibold mb-1">{form.watch('name')}</h2>
-                <p className="text-sm">iamtahazzot</p>
+                <p className="text-sm">{user.username}</p>
 
                 <div className="h-[1px] bg-[#2a2c30] my-6"></div>
 
