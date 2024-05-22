@@ -38,3 +38,8 @@ next-env.d.ts
 # editors
 /.vscode
 /.idea
+
+# trash files
+**/*.log
+**/*.trashed
+**/*.trash
