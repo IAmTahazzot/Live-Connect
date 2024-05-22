@@ -592,3 +592,8 @@ loader
     transform: scale(1);
   }
 }
+
+/* SOME CUSTOM utility classes */
+.slight-shadow {
+  box-shadow: -1px 1px 2px 0 hsl(var(--background-deep-dark), 1);
+}

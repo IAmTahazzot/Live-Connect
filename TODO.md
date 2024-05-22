@@ -1,6 +1,6 @@
 # Step by step procedures to solve 
 
-- remove the member displaying feature from server sidebar
+- ✅ remove the member displaying feature from server sidebar
 - create UI for /me route
 - create profile card
 - `API` to enable friend request feature (only friend can send message to a person)
