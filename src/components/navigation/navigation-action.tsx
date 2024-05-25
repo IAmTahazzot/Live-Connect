@@ -11,7 +11,7 @@ const NavigationAction = () => {
   const { onOpen } = useModal()
   const path = usePathname()
 
-  const isMe = path === '/me'
+  const isMe = path?.toString().includes('/me')
   const isExplore = path === '/explore'
 
   return (

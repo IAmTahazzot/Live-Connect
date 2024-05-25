@@ -52,6 +52,7 @@ export const ProfileModal = () => {
 
       if (conversationId) {
         router.push(`/me/${conversationId}`)
+        router.refresh()
         close()
       }
     } catch (err) {

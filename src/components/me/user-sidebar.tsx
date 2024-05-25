@@ -7,12 +7,19 @@ import { ScrollArea } from '../ui/scroll-area'
 import Link from 'next/link'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
+import { usePathname, useRouter } from 'next/navigation'
+import { X } from 'lucide-react'
+import { toast } from 'sonner'
 
 type UserSidebarProps = {
   profile: Profile
+  conversations: {
+    id: string
+    recipient: Profile
+  }[]
 }
 
-export const UserSidebar = ({ profile }: UserSidebarProps) => {
+export const UserSidebar = ({ profile, conversations }: UserSidebarProps) => {
   const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
@@ -53,10 +60,24 @@ export const UserSidebar = ({ profile }: UserSidebarProps) => {
         />
 
         <h3 className="mt-6 mb-3 font-sans text-[11px] text-[#949ba4] uppercase tracking-wider px-2 font-medium">
-          Direct messages
+          Your conversations
         </h3>
 
-        <Loader clone={14} />
+        {conversations.length > 0 ? (
+          conversations.map(conversation => {
+            return (
+              <SidebarItem
+                key={conversation.id}
+                imageOrIcon={conversation.recipient.imageUrl}
+                label={conversation.recipient.name}
+                href={'/me/' + conversation.id}
+                conversationId={conversation.id}
+              />
+            )
+          })
+        ) : (
+          <Loader clone={14} />
+        )}
       </ScrollArea>
 
       <ServerFooter profile={profile} />
@@ -68,14 +89,51 @@ const SidebarItem = ({
   imageOrIcon,
   label,
   href,
+  conversationId,
 }: {
   imageOrIcon: string | React.ReactNode
   label: string
   href: string
+  conversationId?: string
 }) => {
+  const [deleting, setDeleting] = useState(false)
+  const pathName = usePathname()
+  const router = useRouter()
+
+  const deleteConversation = (conversationId: string) => {
+    toast.warning('Delete conversation?', {
+      action: {
+        label: 'delete',
+        onClick: async () => {
+          // delete the conversation
+
+          try {
+            setDeleting(true)
+            const req = await fetch('/api/conversation', {
+              method: 'DELETE',
+              body: JSON.stringify({ conversationId }),
+            })
+
+            if (!req.ok) {
+              return toast.error('Failed to delete conversation', { duration: 2000 })
+            }
+
+            toast.success('Conversation deleted of ID: ' + conversationId, { duration: 2000 })
+            router.push('/me')
+            router.refresh()
+          } catch (error) {
+            return toast.error('Failed to delete conversation', { duration: 2000 })
+          } finally {
+            setDeleting(false)
+          }
+        },
+      },
+    })
+  }
+
   const createVisual =
     typeof imageOrIcon === 'string' ? (
-      <Image src={imageOrIcon} width={24} height={24} alt={label} priority={true} />
+      <Image src={imageOrIcon} width={24} height={24} alt={label} priority={true} className="rounded-full" />
     ) : (
       imageOrIcon
     )
@@ -83,9 +141,20 @@ const SidebarItem = ({
   return (
     <Link
       href={href}
-      className="flex items-center gap-3 rounded-sm px-3 py-[10px] bg-[hsl(var(--background-modifier-selected)/.6)] hover:bg-[hsl(var(--background-modifier-selected)/.3)] cursor-pointer">
+      className={cn(
+        'flex items-center gap-3 rounded-sm px-3 py-[10px] bg-transparent hover:bg-[hsl(var(--background-modifier-selected)/.3)] cursor-pointer relative group',
+        href === pathName && 'bg-[hsl(var(--background-modifier-selected)/.6)]'
+      )}>
       {createVisual}
       <span>{label}</span>
+
+      {conversationId && (
+        <div
+          className="absolute top-1/2 right-2 -translate-y-1/2 rounded-md cursor-pointer"
+          onClick={() => deleteConversation(conversationId)}>
+          {deleting ? <div className="loader -translate-x-4"></div> : <X size={18} className="group-hover:block hidden opacity-70" />}
+        </div>
+      )}
     </Link>
   )
 }

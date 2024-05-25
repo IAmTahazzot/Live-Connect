@@ -63,3 +63,37 @@ export const POST = async (req: Request) => {
     conversationId: newConversation.id,
   })
 }
+
+export const DELETE = async (req: Request) => {
+  const user = await currentUser()
+
+  if (!user) {
+    return {
+      status: 401,
+      body: { error: 'Unauthorized' },
+    }
+  }
+
+  const { conversationId } = (await req.json()) as unknown as { conversationId: string }
+
+  // delete all messages
+  await db.userMessages.deleteMany({
+    where: {
+      conversationId,
+    },
+  })
+
+  // delete the conversation
+  await db.conversation.delete({
+    where: {
+      id: conversationId,
+    },
+    include: {
+      messages: true,
+    },
+  })
+
+  return NextResponse.json({
+    message: 'Conversation deleted',
+  })
+}
