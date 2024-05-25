@@ -19,16 +19,14 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { MODAL_TYPES, useModal } from '@/hooks/use-modal-store'
 
-interface ChatItemProps {
+interface UserMessageProps {
   id: string
   content: string
-  member: Member & {
-    profile: Profile
-  }
+  currentUser: Profile // This is the current user's profile
+  profile: Profile // Message recipient's profile
   timestamp: string
   fileUrl: string | null
   deleted: boolean
-  currentMember: Member
   isUpdated: boolean
   socketUrl: string
   socketQuery: Record<string, string>
@@ -45,30 +43,30 @@ const formSchema = z.object({
   content: z.string().min(1),
 })
 
-const ChatItem = ({
+export const UserMessage = ({
   id,
   content,
-  member,
+  profile,
+  currentUser,
   timestamp,
   fileUrl,
   deleted,
-  currentMember,
   isUpdated,
   socketUrl,
   socketQuery,
   isRapid = false,
-}: ChatItemProps) => {
+}: UserMessageProps) => {
   const [isEditing, setIsEditing] = useState(false)
   const { onOpen } = useModal()
   const params = useParams()
   const router = useRouter()
 
   const onMemberClick = () => {
-    if (member.id === currentMember.id) {
+    if (profile.id === currentUser.id) {
       return
     }
 
-    onOpen(MODAL_TYPES.PROFILE, { member, currentMember })
+    onOpen(MODAL_TYPES.PROFILE, { profile, currentUser })
   }
 
   useEffect(() => {
@@ -90,6 +88,7 @@ const ChatItem = ({
 
   const isLoading = form.formState.isSubmitting
 
+  // update message content
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       const url = qs.stringifyUrl({
@@ -98,7 +97,6 @@ const ChatItem = ({
       })
 
       await axios.patch(url, values)
-
       form.reset()
       setIsEditing(false)
     } catch (error) {
@@ -114,10 +112,8 @@ const ChatItem = ({
 
   const fileType = fileUrl?.split('.').pop()
 
-  const isAdmin = currentMember.role === MemberRole.ADMIN
-  const isModerator = currentMember.role === MemberRole.MODERATOR
-  const isOwner = currentMember.id === member.id
-  const canDeleteMessage = !deleted && (isAdmin || isModerator || isOwner)
+  const isOwner = currentUser.id === profile.id
+  const canDeleteMessage = !deleted && isOwner
   const canEditMessage = !deleted && isOwner && !fileUrl
   const isPDF = fileType === 'pdf' && fileUrl
   const isImage = !isPDF && fileUrl
@@ -130,15 +126,14 @@ const ChatItem = ({
       )}>
       <div className="grid grid-cols-[40px,1fr] gap-x-4 group items-start w-full">
         <div onClick={onMemberClick} className={cn('cursor-pointer hover:drop-shadow-md transition')}>
-          <UserAvatar src={member.profile.imageUrl} className={`${isRapid && 'hidden'}`} />
+          <UserAvatar src={profile.imageUrl} className={`${isRapid && 'hidden'}`} />
         </div>
         <div className={cn('flex flex-col w-full')}>
           <div className={cn('items-center gap-x-3', isRapid ? 'hidden' : 'flex')}>
             <div className="flex items-center">
               <p onClick={onMemberClick} className="font-semibold text-sm hover:underline cursor-pointer">
-                {member.profile.name}
+                {profile.name}
               </p>
-              <ActionTooltip label={member.role}>{roleIconMap[member.role]}</ActionTooltip>
             </div>
             <span className="text-[12px] text-zinc-500 dark:text-zinc-400">{timestamp}</span>
           </div>
@@ -233,5 +228,3 @@ const ChatItem = ({
     </div>
   )
 }
-
-export default ChatItem

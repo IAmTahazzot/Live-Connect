@@ -59,11 +59,6 @@ export const ExplorePublicServer = () => {
 
     // check if this server is already joined by the user
     const isUserJoined = joinedServers.some(userServer => userServer.id === server.id)
-    console.log('-------')
-    console.log(isUserJoined)
-    console.log('j', joinedServers)
-    console.log('us', userServerCollection)
-    console.log('s', serverCollection)
 
     if (isUserJoined) {
       router.push(`/servers/${server.id}`)

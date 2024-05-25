@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { DirectMessage } from '@prisma/client'
+import { UserMessages } from '@prisma/client'
 
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
@@ -22,10 +22,10 @@ export async function GET(req: Request) {
       return new NextResponse('Conversation ID missing', { status: 400 })
     }
 
-    let messages: DirectMessage[] = []
+    let messages: UserMessages[] = []
 
     if (cursor) {
-      messages = await db.directMessage.findMany({
+      messages = await db.userMessages.findMany({
         take: MESSAGES_BATCH,
         skip: 1,
         cursor: {
@@ -35,28 +35,20 @@ export async function GET(req: Request) {
           conversationId,
         },
         include: {
-          member: {
-            include: {
-              profile: true,
-            },
-          },
+          profile: true,
         },
         orderBy: {
           createdAt: 'desc',
         },
       })
     } else {
-      messages = await db.directMessage.findMany({
+      messages = await db.userMessages.findMany({
         take: MESSAGES_BATCH,
         where: {
           conversationId,
         },
         include: {
-          member: {
-            include: {
-              profile: true,
-            },
-          },
+          profile: true,
         },
         orderBy: {
           createdAt: 'desc',
