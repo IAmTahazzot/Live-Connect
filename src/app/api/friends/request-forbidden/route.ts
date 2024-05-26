@@ -2,6 +2,9 @@ import { db } from '@/lib/db'
 import { currentUser } from '@clerk/nextjs'
 import { NextRequest, NextResponse } from 'next/server'
 
+// two types of friend Req will happen (two way actually)
+// 1. user A sends req will a keywords which is a username, find username and send req
+// 2. user A sends req with user A and B id
 export const GET = async (req: NextRequest) => {
   const clerkUser = await currentUser()
 
@@ -45,5 +48,28 @@ export const GET = async (req: NextRequest) => {
     return friend.profileId === user.id ? friend.friend : friend.profile
   })
 
-  return NextResponse.json(friendProfiles, { status: 200 })
+  // get all friend requests
+  const friendRequests = await db.friendRequest.findMany({
+    where: {
+      OR: [
+        {
+          profileId: user.id,
+        },
+        {
+          friendId: user.id,
+        },
+      ],
+    },
+
+    include: {
+      profile: true,
+      friend: true,
+    },
+  })
+
+  const friendRequestProfiles = friendRequests.map(friendRequest => {
+    return friendRequest.profileId === user.id ? friendRequest.friend : friendRequest.profile
+  })
+
+  return NextResponse.json([...friendProfiles, ...friendRequestProfiles], { status: 200 })
 }

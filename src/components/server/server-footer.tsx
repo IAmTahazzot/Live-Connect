@@ -25,7 +25,7 @@ export const ServerFooter = ({ profile }: ServerFooterProps) => {
               Online
             </p>
             <p className="text-[12px] text-gray-400 m-0 transition-transform duration-200 group-hover:-translate-y-5">
-              {profile.email.split('@')[0]}
+              {profile.username}
             </p>
           </div>
         </div>

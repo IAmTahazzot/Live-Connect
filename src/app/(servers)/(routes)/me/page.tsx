@@ -40,7 +40,7 @@ export default function Home() {
         <div className="mx-2 w-[1px] h-[60%] bg-[#3e4044]"></div>
         <button
           className={cn(
-            'h-7 px-2 rounded-sm flex items-center justify-items-center outline-0 text-[#b7bdc4] hover:bg-[hsl(var(--background-modifier-selected)/.3)]',
+            'h-7 px-2 rounded-sm flex items-center justify-items-center outline-0 text-[#b7bdc4] hover:bg-[hsl(var(--background-modifier-selected)/.3)] font-medium',
             tab === Tab.AllFriends && 'bg-[hsl(var(--background-modifier-selected)/.6)] text-white'
           )}
           onClick={() => setTab(Tab.AllFriends)}>
@@ -48,7 +48,7 @@ export default function Home() {
         </button>
         <button
           className={cn(
-            'h-7 px-2 rounded-sm flex items-center justify-items-center outline-0 text-[#b7bdc4] hover:bg-[hsl(var(--background-modifier-selected)/.3)]',
+            'h-7 px-2 rounded-sm flex items-center justify-items-center outline-0 text-[#b7bdc4] hover:bg-[hsl(var(--background-modifier-selected)/.3)] font-medium',
             tab === Tab.PendingRequests && 'bg-[hsl(var(--background-modifier-selected)/.6)] text-white'
           )}
           onClick={() => setTab(Tab.PendingRequests)}>
@@ -56,7 +56,7 @@ export default function Home() {
         </button>
         <button
           className={cn(
-            'h-7 px-2 rounded-sm flex items-center justify-items-center outline-0 text-[#b7bdc4] hover:bg-[hsl(var(--background-modifier-selected)/.3)]',
+            'h-7 px-2 rounded-sm flex items-center justify-items-center outline-0 text-[#b7bdc4] hover:bg-[hsl(var(--background-modifier-selected)/.3)] font-medium',
             tab === Tab.AddFriends && 'bg-[hsl(var(--background-modifier-selected)/.6)] text-white'
           )}
           onClick={() => setTab(Tab.AddFriends)}>

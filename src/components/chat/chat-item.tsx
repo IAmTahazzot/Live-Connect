@@ -68,7 +68,7 @@ const ChatItem = ({
       return
     }
 
-    onOpen(MODAL_TYPES.PROFILE, { member, currentMember })
+    onOpen(MODAL_TYPES.PROFILE, { profile: member.profile, currentUserId: currentMember.profileId })
   }
 
   useEffect(() => {

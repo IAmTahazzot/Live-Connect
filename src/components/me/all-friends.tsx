@@ -1,5 +1,8 @@
+'use client'
+
 export const AllFriends = () => {
-	return (
-		<div>friends</div>
-	)
+  return (
+    <div className="h-full py-4 px-6">
+    </div>
+  )
 }

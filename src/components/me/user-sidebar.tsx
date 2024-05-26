@@ -152,14 +152,18 @@ const SidebarItem = ({
         <div
           className="absolute top-1/2 right-2 -translate-y-1/2 rounded-md cursor-pointer"
           onClick={() => deleteConversation(conversationId)}>
-          {deleting ? <div className="loader -translate-x-4"></div> : <X size={18} className="group-hover:block hidden opacity-70" />}
+          {deleting ? (
+            <div className="loader -translate-x-4"></div>
+          ) : (
+            <X size={18} className="group-hover:block hidden opacity-70" />
+          )}
         </div>
       )}
     </Link>
   )
 }
 
-const Loader = ({ clone = 1 }: { clone?: number }) => {
+export const Loader = ({ clone = 1 }: { clone?: number }) => {
   const opacity = 1
 
   return Array.from({ length: clone }).map((_, i) => (

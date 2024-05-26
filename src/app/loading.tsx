@@ -3,7 +3,7 @@
 const amazingFacts : { text: string; deprecated: boolean }[] = [
     {
         text: 'The one who created this discord is Tahazzot, ME 😘',
-        deprecated: false
+        deprecated: true 
     },
     {
         text: 'I love you 💞',
@@ -15,7 +15,7 @@ const amazingFacts : { text: string; deprecated: boolean }[] = [
     },
     {
         text: 'You are handsome a person 😍',
-        deprecated: true // deprecated because it's not true  :(
+        deprecated: false // deprecated because it's not true  :(
     },
     {
         text: 'You are a good person',
@@ -40,7 +40,7 @@ const Loading = () => {
     let randomFact = amazingFacts.filter(fact => !fact.deprecated)[Math.floor(Math.random() * (amazingFacts.length - 1))].text
 
     return (
-        <div className={'h-screen flex items-center justify-center'}>
+        <div className={'h-full min-h-screen flex items-center justify-center w-full'}>
             <div className={'text-center mt-8'}>
                 <video
                     className={'mx-auto mb-5 w-56'}
