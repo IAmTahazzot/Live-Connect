@@ -4,6 +4,7 @@ import { Profile } from '@prisma/client'
 import Image from 'next/image'
 import { MODAL_TYPES, useModal } from '@/hooks/use-modal-store'
 import { useEffect, useState } from 'react'
+import { Check, X } from 'lucide-react'
 
 type UserBlockProps = {
   action?: React.ReactNode
@@ -16,7 +17,7 @@ export const UserBlock = ({ action, profile, currentUserId, requestForbidden }: 
   const { onOpen } = useModal()
 
   return (
-    <div className="grid grid-cols-[32px_1fr_auto] gap-2 rounded-sm bg p-3 hover:bg-[hsl(var(--background-modifier-selected)/.3)]">
+    <div className="grid grid-cols-[32px_1fr_auto] gap-2 rounded-sm bg p-3 hover:bg-[hsl(var(--background-modifier-selected)/.3)] group">
       <div className="relative w-6 h-6 rounded-full bg-gray-300">
         <Image src={profile.imageUrl!} alt={'Profile Picture'} fill className="rounded-full object-cover" />
       </div>
@@ -27,7 +28,9 @@ export const UserBlock = ({ action, profile, currentUserId, requestForbidden }: 
         }}>
         {profile.name}
       </span>
-      <div className="flex items-center gap-x-2">{action}</div>
+      <div className="opacity-0 group-hover:opacity-100 flex items-center gap-x-2 transition-opacity duration-300">
+        {action}
+      </div>
     </div>
   )
 }
@@ -57,8 +60,8 @@ const Icons = ({ name }: { name: BlockIcons }) => {
           fill="currentColor"></path>
       </svg>
     ),
-    [BlockIcons.ACCEPT]: <div></div>,
-    [BlockIcons.REJECT]: <div></div>,
+    [BlockIcons.ACCEPT]: <Check size={18} />,
+    [BlockIcons.REJECT]: <X size={18} />,
   }
 
   return ICONS[name]

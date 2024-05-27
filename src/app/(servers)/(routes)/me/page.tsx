@@ -14,7 +14,7 @@ export default function Home() {
     AddFriends,
   }
 
-  const [tab, setTab] = useState<Tab>(Tab.Empty)
+  const [tab, setTab] = useState<Tab>(Tab.AllFriends)
 
   return (
     <div className="grid grid-rows-[48px_1fr] bg-white dark:bg-[#313338] h-full">

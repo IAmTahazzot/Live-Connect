@@ -82,10 +82,7 @@ export const AddFriends = () => {
 
   return (
     <div
-      className="grid grid-cols-[1fr_350px] gap-4 h-full px-2"
-      style={{
-        overflow: 'hidden auto',
-      }}>
+      className="grid grid-cols-[1fr_350px] gap-4 h-full px-2 overflow-hidden">
       <div className="px-4 py-6">
         <h3 className="uppercase font-semibold mb-1">Add Friend</h3>
         <p className="text-sm text-gray-400">You can add friends with their username.</p>
@@ -113,7 +110,7 @@ export const AddFriends = () => {
           </div>
         </form>
       </div>
-      <div className="border-l-[1px] border-solid border-zinc-600/50 px-4 py-6">
+      <div className="border-l-[1px] border-solid border-zinc-600/50 px-4 py-6 h-full">
         <h3 className="font-medium text-gray-200 mb-2">Find friends</h3>
 
         <div className="overflow-y-auto h-full">

@@ -32,7 +32,7 @@ export const POST = async (req: NextRequest) => {
 
     // if user is trying to add himself or herself
     if (friend.id === currentUserId) {
-      return NextResponse.json({ message: 'Seriously? bro, You can\'t add yourself as friend!' }, { status: 400 })
+      return NextResponse.json({ message: "Seriously? bro, You can't add yourself as friend!" }, { status: 400 })
     }
 
     _friendId = friend.id
@@ -100,4 +100,47 @@ export const POST = async (req: NextRequest) => {
   })
 
   return NextResponse.json({ message: 'Friend request sent' }, { status: 200 })
+}
+
+export const GET = async (req: NextRequest) => {
+  const clerkUser = await currentUser()
+
+  if (!clerkUser) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 404 })
+  }
+
+  const { id } = clerkUser
+
+  // find user id
+  const user = await db.profile.findUnique({
+    where: {
+      userId: id,
+    },
+  })
+
+  if (!user) {
+    return NextResponse.json({ message: 'User not found' }, { status: 404 })
+  }
+
+  // get all where you have sent request
+  const pending = await db.friendRequest.findMany({
+    where: {
+      profileId: user.id,
+    },
+    include: {
+      friend: true,
+    },
+  })
+
+  // get all where you have received request
+  const requester = await db.friendRequest.findMany({
+    where: {
+      friendId: user.id,
+    },
+    include: {
+      profile: true,
+    },
+  })
+
+  return NextResponse.json({ pending, requester }, { status: 200 })
 }
