@@ -1,25 +1,26 @@
 // initializing user-user conversation
 // if conversation already exist, return the conversation ID
 
-import { db } from '@/lib/db'
-import { currentUser } from '@clerk/nextjs'
-import { NextResponse } from 'next/server'
+import { db } from "@/lib/db";
+import { currentUser } from "@clerk/nextjs";
+import { NextRequest, NextResponse } from "next/server";
 
 // if not, create a new conversation and return the conversation ID
-export const POST = async (req: Request) => {
-  const user = await currentUser()
+export const POST = async (req: NextRequest) => {
+  const user = await currentUser();
 
   if (!user) {
-    return {
+    return NextResponse.json({
       status: 401,
-      body: { error: 'Unauthorized' },
-    }
+      body: { error: "Unauthorized" },
+    });
   }
 
-  const { conversationFrom, conversationTo } = (await req.json()) as unknown as {
-    conversationFrom: string
-    conversationTo: string
-  }
+  const { conversationFrom, conversationTo } =
+    (await req.json()) as unknown as {
+      conversationFrom: string;
+      conversationTo: string;
+    };
 
   // check if conversation already exist
   const conversation = await db.conversation.findFirst({
@@ -39,12 +40,12 @@ export const POST = async (req: Request) => {
     select: {
       id: true,
     },
-  })
+  });
 
   if (conversation) {
     return NextResponse.json({
       conversationId: conversation.id,
-    })
+    });
   }
 
   // create new conversation
@@ -57,31 +58,33 @@ export const POST = async (req: Request) => {
     select: {
       id: true,
     },
-  })
+  });
 
   return NextResponse.json({
     conversationId: newConversation.id,
-  })
-}
+  });
+};
 
-export const DELETE = async (req: Request) => {
-  const user = await currentUser()
+export const DELETE = async (req: NextRequest) => {
+  const user = await currentUser();
 
   if (!user) {
-    return {
+    return NextResponse.json({
       status: 401,
-      body: { error: 'Unauthorized' },
-    }
+      body: { error: "Unauthorized" },
+    });
   }
 
-  const { conversationId } = (await req.json()) as unknown as { conversationId: string }
+  const { conversationId } = (await req.json()) as unknown as {
+    conversationId: string;
+  };
 
   // delete all messages
   await db.userMessages.deleteMany({
     where: {
       conversationId,
     },
-  })
+  });
 
   // delete the conversation
   await db.conversation.delete({
@@ -91,9 +94,9 @@ export const DELETE = async (req: Request) => {
     include: {
       messages: true,
     },
-  })
+  });
 
   return NextResponse.json({
-    message: 'Conversation deleted',
-  })
-}
+    message: "Conversation deleted",
+  });
+};

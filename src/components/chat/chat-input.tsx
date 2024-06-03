@@ -11,6 +11,8 @@ import qs from 'query-string'
 import axios from 'axios'
 import { MODAL_TYPES, useModal } from '@/hooks/use-modal-store'
 import EmojiPicker from '@/components/emoji-picker'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 interface ChatInputProps {
   apiUrl: string
@@ -25,6 +27,7 @@ const formSchema = z.object({
 
 const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
   const { onOpen } = useModal()
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,7 +51,9 @@ const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
       const inputDOM = document.querySelector('input[name="content"]') as HTMLInputElement
       inputDOM.focus()
     } catch (error) {
-      console.log(error)
+      toast.error('Server data updated, Syncing with server!')
+      router.push('/me')
+      router.refresh()
     }
   }
 

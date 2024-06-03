@@ -7,3 +7,10 @@
 - `API` to accept request
 - Display all friends including, pending req
 - Enable search feature to seach server or friend names on /me route
+
+
+
+# Fix
+
+- Delete conversation effective imiediately everywhere
+- friend too
