@@ -42,30 +42,11 @@ export const GET = async (req: NextRequest) => {
   })
 
   const friendProfiles = friends.map(friend => {
-    return friend.profileId === user.id ? friend.friend : friend.profile
+    return {
+      id: friend.id,
+      profile: friend.profileId === user.id ? friend.friend : friend.profile
+    }
   })
 
   return NextResponse.json(friendProfiles, { status: 200 })
-}
-
-export const DELETE = async (req: NextRequest) => {
-  const { id } = await req.json() // friend id
-
-  const clerkUser = await currentUser()
-
-  if (!clerkUser) {
-    return NextResponse.json({ message: 'Unauthorized' }, { status: 404 })
-  }
-
-  try {
-    await db.friend.delete({
-      where: {
-        id,
-      },
-    })
-
-    return NextResponse.json({ message: 'Friend removed successfully' }, { status: 200 })
-  } catch (e) {
-    return NextResponse.json({ message: 'Failed to remove friend', details: e }, { status: 500 })
-  }
 }

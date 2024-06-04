@@ -81,8 +81,7 @@ export const AddFriends = () => {
   }
 
   return (
-    <div
-      className="grid grid-cols-[1fr_350px] gap-4 h-full px-2 overflow-hidden">
+    <div className="grid grid-cols-[1fr_350px] gap-4 h-full px-2 overflow-hidden">
       <div className="px-4 py-6">
         <h3 className="uppercase font-semibold mb-1">Add Friend</h3>
         <p className="text-sm text-gray-400">You can add friends with their username.</p>
@@ -100,6 +99,9 @@ export const AddFriends = () => {
               {...form.register('keywords')}
               autoComplete="off"
               autoFocus
+              style={{
+                outline: 'none',
+              }}
             />
             <button
               type="submit"

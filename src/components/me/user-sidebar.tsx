@@ -27,7 +27,13 @@ export const UserSidebar = ({ profile, conversations }: UserSidebarProps) => {
   }, [])
 
   if (!hydrated) {
-    return '...'
+    return (
+      <div className="p-2 animate-pulse">
+        <div className="w-full rounded-sm bg-[hsl(var(--background-deep-dark))] p-2 h-7"></div>
+
+        <div className="rounded-sm h-10 bg-[hsl(var(--background-modifier-selected)/.6)] mt-4"></div>
+      </div>
+    )
   }
 
   return (

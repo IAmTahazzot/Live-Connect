@@ -144,3 +144,64 @@ export const GET = async (req: NextRequest) => {
 
   return NextResponse.json({ pending, requester }, { status: 200 })
 }
+
+export const DELETE = async (req: NextRequest) => {
+  const { id } = await req.json() // friend request id
+
+  const clerkUser = await currentUser()
+
+  if (!clerkUser) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 404 })
+  }
+
+  try {
+    await db.friendRequest.delete({
+      where: {
+        id: id,
+      },
+    })
+
+    return NextResponse.json({ message: 'Friend request deleted' }, { status: 200 })
+  } catch (error) {
+    return NextResponse.json({ message: 'Friend request not found' }, { status: 404 })
+  }
+}
+
+export const PUT = async (req: NextRequest) => {
+  const { id } = await req.json() // friend request id
+
+  const clerkUser = await currentUser()
+
+  if (!clerkUser) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 404 })
+  }
+
+  try {
+    const friendRequest = await db.friendRequest.findUnique({
+      where: {
+        id: id,
+      },
+    })
+
+    if (!friendRequest) {
+      return NextResponse.json({ message: 'Friend request not found' }, { status: 404 })
+    }
+
+    await db.friend.create({
+      data: {
+        profileId: friendRequest.profileId,
+        friendId: friendRequest.friendId,
+      },
+    })
+
+    await db.friendRequest.delete({
+      where: {
+        id: id,
+      },
+    })
+
+    return NextResponse.json({ message: 'Friend request accepted' }, { status: 200 })
+  } catch (error) {
+    return NextResponse.json({ message: 'Friend request not found' }, { status: 404 })
+  }
+}

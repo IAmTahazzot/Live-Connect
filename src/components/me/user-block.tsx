@@ -28,7 +28,7 @@ export const UserBlock = ({ action, profile, currentUserId, requestForbidden }: 
         }}>
         {profile.name}
       </span>
-      <div className="opacity-0 group-hover:opacity-100 flex items-center gap-x-2 transition-opacity duration-300">
+      <div className="flex items-center gap-x-2 transition-opacity duration-300">
         {action}
       </div>
     </div>
