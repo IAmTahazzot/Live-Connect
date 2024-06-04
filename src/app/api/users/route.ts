@@ -40,7 +40,7 @@ export const PATCH = async (req: Request) => {
     })
   }
 
-  const { name, bio } = await req.json()
+  const { name, bio, lookingForFriends } = await req.json()
 
   if (!name && !bio) {
     return NextResponse.json({
@@ -58,6 +58,7 @@ export const PATCH = async (req: Request) => {
     data: {
       name,
       bio,
+      lookingForFriends: lookingForFriends || false,
     },
   })
 

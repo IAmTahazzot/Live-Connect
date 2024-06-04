@@ -2,13 +2,14 @@
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Profile } from '@prisma/client'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Hash } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import Image from 'next/image'
 import { z } from 'zod'
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { toast } from 'sonner'
+import { Switch } from '../input/switch'
 
 const profileFormSchema = z.object({
   name: z
@@ -16,21 +17,25 @@ const profileFormSchema = z.object({
     .min(3, { message: 'Just a bit longer.' })
     .max(32, { message: 'Well, Consider using short name please.' }),
   bio: z.string().max(160, { message: 'Bio must be at most 160 characters long.' }),
+  lookingForFriends: z.boolean(),
 })
 
 export const PanelProfile = () => {
   const [user, setUser] = useState<Profile>()
+  const [gettingUser, setGettingUser] = useState(true)
 
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       name: '',
       bio: '',
+      lookingForFriends: false,
     },
   })
 
   useEffect(() => {
     const getUser = async () => {
+      setGettingUser(true)
       const data = await fetch('/api/users/', {
         method: 'GET',
       })
@@ -42,12 +47,14 @@ export const PanelProfile = () => {
         return
       }
 
-      const user = response.body.data
+      const user = response.body.data as Profile
 
       form.setValue('name', user.name || '')
       form.setValue('bio', user.bio || '')
+      form.setValue('lookingForFriends', user.lookingForFriends || false)
 
       setUser(user)
+      setGettingUser(false)
     }
 
     getUser()
@@ -73,7 +80,7 @@ export const PanelProfile = () => {
         body: JSON.stringify(data),
       })
 
-      const result = await response.json()
+      await response.json()
 
       if (response.status === 401) {
         toast.error('Unauthorized')
@@ -86,8 +93,35 @@ export const PanelProfile = () => {
         })
       }
     } catch (error) {
-      alert('An error occurred, please refresh the page or try again later.')
+      console.log(error)
+      toast.error('An error occurred, please refresh the page or try again later.')
     }
+  }
+
+  if (gettingUser) {
+    return (
+      <div className="animate-pulse">
+        <h1 className="text-[20px] font-semibold mb-4">Profile</h1>
+
+        <div className="grid grid-cols-2 gap-x-4">
+          <div>
+            <div className="rounded-full bg-[hsla(var(--background-deep-dark),.3)] h-4 mb-2 w-24"></div>
+            <div className="rounded-sm bg-[hsl(var(--background-deep-dark))] h-10"></div>
+
+            <div className="h-[1px] bg-[#41444a] my-6"></div>
+
+            <div className="rounded-full bg-[hsla(var(--background-deep-dark),.3)] h-4 mb-2 w-16"></div>
+            <div className="rounded-sm bg-[hsl(var(--background-deep-dark))] h-20"></div>
+          </div>
+          <div>
+            <div className="h-[300px] rounded-md bg-[hsla(var(--background-deep-dark),.5)] p-4">
+              <div className="h-24 w-24 rounded-full bg-[hsl(var(--background-deep-dark))] my-10"></div>
+              <div className="h-[100px] rounded-md bg-[hsla(var(--background-deep-dark),.7)] my-3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (!user) {
@@ -123,7 +157,23 @@ export const PanelProfile = () => {
               className="w-full min-h-[64px] p-[10px] rounded-[3px] bg-[hsl(var(--background-deep-dark))] text-white resize-none"></textarea>
             <span className="text-red-500 text-xs font-medium">{form.formState.errors.bio?.message}</span>
 
-            <button className="flex justify-center items-center px-4 text-sm font-medium bg-[#5865f2] hover:bg-[#505bd8] text-white rounded-[3px] h-10 w-[120px] mt-4">
+            <div className="h-[1px] bg-[#41444a] my-6"></div>
+
+            <div className="flex items-center justify-between">
+              <h2 className="uppercase font-semibold text-gray-200 text-xs tracking-wide mb-2">Looking for friends?</h2>
+              <Switch
+                id="lookingForFriends"
+                inputAttrs={form.register('lookingForFriends')}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  form.setValue('lookingForFriends', e.target.checked)
+                }}
+                isChecked={user.lookingForFriends}
+              />
+            </div>
+
+            <button
+              className="flex justify-center items-center px-4 text-sm font-medium bg-[#5865f2] hover:bg-[#505bd8] text-white rounded-[3px] h-10 w-[120px] mt-4"
+              draggable="false">
               {form.formState.isSubmitting ? <div className="loader"></div> : 'Save'}
             </button>
           </form>
