@@ -3,6 +3,10 @@
 import Image from 'next/image'
 import { Profile } from '@prisma/client'
 import { usePanel, PANEL_TYPES } from '@/hooks/use-panel'
+import { Cogs } from '../icons'
+import { SignOutButton } from '@clerk/nextjs'
+import { LiaSignOutAltSolid } from 'react-icons/lia'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 type ServerFooterProps = {
   profile: Profile
@@ -12,14 +16,16 @@ export const ServerFooter = ({ profile }: ServerFooterProps) => {
   const { onOpen } = usePanel()
 
   return (
-    <div className="grid grid-cols-[minmax(100px,150px)_auto] items-center dark:bg-[hsla(var(--background-deep-dark),.8)] px-2 py-[6px] group">
-      <div className="flex items-center gap-2 dark:hover:bg-[hsla(var(--background-modifier-selected)/.3)] rounded-sm p-[2px] select-none cursor-pointer overflow-hidden">
+    <div className="grid grid-cols-[minmax(100px,130px)_auto] items-center justify-between dark:bg-[hsla(var(--background-deep-dark),.8)] px-2 py-[6px] group">
+      <div className="flex items-center gap-2 dark:hover:bg-[hsla(var(--background-modifier-selected)/.5)] rounded-sm p-[2px] select-none cursor-pointer overflow-hidden">
         <div className="w-8 h-8 relative rounded-full shrink-0">
           <Image src={profile.imageUrl} fill className="rounded-full" alt="user profile picture" priority={true} />
           <div className=" box-content absolute h-[10px] w-[10px] rounded-full bg-emerald-500 -bottom-[2px] -right-1 z-10 border-solid border-[4px] dark:border-[#212226]"></div>
         </div>
         <div className="flex flex-col gap-0">
-          <h4 className="text-sm mb-0 text-ellipsis whitespace-nowrap max-w-[110px]">{profile.name}</h4>
+          <h4 className="text-sm mb-0 text-ellipsis whitespace-nowrap w-[90px] overflow-hidden">
+            Some motherfuckerseur
+          </h4>
           <div className="relative h-4 overflow-hidden">
             <p className="text-[12px] text-gray-400 m-0 transition-transform duration-200 group-hover:-translate-y-4">
               Online
@@ -30,57 +36,36 @@ export const ServerFooter = ({ profile }: ServerFooterProps) => {
           </div>
         </div>
       </div>
-      <div className="grid content-center justify-items-end pr-2">
-        <div className="rounded-sm dark:hover:bg-[hsla(var(--background-modifier-selected)/.3)] p-[2px] h-8 w-8 flex items-center justify-center">
-          <button
-            className="hover:rotate-180 duration-1000 delay-300"
-            onClick={() => {
-              onOpen(PANEL_TYPES.PROFILE)
-            }}>
-            <svg
-              viewBox="0 0 24 24"
-              width="20"
-              height="20"
-              style={{
-                width: '100%',
-                height: '100%',
-                transform: 'translate3d(0px, 0px, 0px)',
-                contentVisibility: 'visible',
-              }}>
-              <defs>
-                <clipPath id="__lottie_element_100">
-                  <rect width="24" height="24" x="0" y="0"></rect>
-                </clipPath>
-                <clipPath id="__lottie_element_102">
-                  <path d="M0,0 L600,0 L600,600 L0,600z"></path>
-                </clipPath>
-              </defs>
-              <g clipPath="url(#__lottie_element_100)">
-                <g
-                  clipPath="url(#__lottie_element_102)"
-                  transform="matrix(0.03999999910593033,0,0,0.03999999910593033,0,0)"
-                  opacity="1"
-                  style={{
-                    display: 'block',
+      <div className="grid grid-cols-2 gap-1">
+        <TooltipProvider>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger>
+              <SignOutButton>
+                <div className="rounded-sm dark:hover:bg-[hsla(var(--background-modifier-selected)/.3)] p-[2px] h-8 w-8 flex items-center justify-center cursor-pointer">
+                  <LiaSignOutAltSolid size={24} className="text-gray-300" />
+                </div>
+              </SignOutButton>
+            </TooltipTrigger>
+            <TooltipContent>Sign out</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger>
+              <div className="rounded-sm dark:hover:bg-[hsla(var(--background-modifier-selected)/.3)] p-[2px] h-8 w-8 flex items-center justify-center group/cog cursor-pointer">
+                <button
+                  className="group-hover/cog:rotate-180 duration-1000 delay-300"
+                  onClick={() => {
+                    onOpen(PANEL_TYPES.PROFILE)
                   }}>
-                  <g
-                    transform="matrix(25,0,0,25,300,300)"
-                    opacity="1"
-                    style={{
-                      display: 'block',
-                    }}>
-                    <g opacity="1" transform="matrix(1,0,0,1,0,0)">
-                      <path
-                        className="dark:fill-gray-400"
-                        fillOpacity="1"
-                        d=" M-1.4420000314712524,-10.906000137329102 C-1.8949999809265137,-10.847000122070312 -2.1470000743865967,-10.375 -2.078000068664551,-9.92300033569336 C-1.899999976158142,-8.756999969482422 -2.265000104904175,-7.7210001945495605 -3.061000108718872,-7.390999794006348 C-3.8570001125335693,-7.060999870300293 -4.8480000495910645,-7.534999847412109 -5.546000003814697,-8.484999656677246 C-5.816999912261963,-8.852999687194824 -6.329999923706055,-9.008999824523926 -6.691999912261963,-8.730999946594238 C-7.458000183105469,-8.142999649047852 -8.142999649047852,-7.458000183105469 -8.730999946594238,-6.691999912261963 C-9.008999824523926,-6.329999923706055 -8.852999687194824,-5.816999912261963 -8.484999656677246,-5.546000003814697 C-7.534999847412109,-4.8480000495910645 -7.060999870300293,-3.8570001125335693 -7.390999794006348,-3.061000108718872 C-7.7210001945495605,-2.265000104904175 -8.756999969482422,-1.899999976158142 -9.92300033569336,-2.078000068664551 C-10.375,-2.1470000743865967 -10.847000122070312,-1.8949999809265137 -10.906000137329102,-1.4420000314712524 C-10.968000411987305,-0.9700000286102295 -11,-0.48899999260902405 -11,0 C-11,0.48899999260902405 -10.968000411987305,0.9700000286102295 -10.906000137329102,1.4420000314712524 C-10.847000122070312,1.8949999809265137 -10.375,2.1470000743865967 -9.92300033569336,2.078000068664551 C-8.756999969482422,1.899999976158142 -7.7210001945495605,2.265000104904175 -7.390999794006348,3.061000108718872 C-7.060999870300293,3.8570001125335693 -7.534999847412109,4.8470001220703125 -8.484999656677246,5.546000003814697 C-8.852999687194824,5.816999912261963 -9.008999824523926,6.328999996185303 -8.730999946594238,6.691999912261963 C-8.142999649047852,7.458000183105469 -7.458000183105469,8.142999649047852 -6.691999912261963,8.730999946594238 C-6.329999923706055,9.008999824523926 -5.816999912261963,8.852999687194824 -5.546000003814697,8.484999656677246 C-4.8480000495910645,7.534999847412109 -3.8570001125335693,7.060999870300293 -3.061000108718872,7.390999794006348 C-2.265000104904175,7.7210001945495605 -1.899999976158142,8.756999969482422 -2.078000068664551,9.92300033569336 C-2.1470000743865967,10.375 -1.8949999809265137,10.847000122070312 -1.4420000314712524,10.906000137329102 C-0.9700000286102295,10.968000411987305 -0.48899999260902405,11 0,11 C0.48899999260902405,11 0.9700000286102295,10.968000411987305 1.4420000314712524,10.906000137329102 C1.8949999809265137,10.847000122070312 2.1470000743865967,10.375 2.078000068664551,9.92300033569336 C1.899999976158142,8.756999969482422 2.2660000324249268,7.7210001945495605 3.062000036239624,7.390999794006348 C3.8580000400543213,7.060999870300293 4.8480000495910645,7.534999847412109 5.546000003814697,8.484999656677246 C5.816999912261963,8.852999687194824 6.328999996185303,9.008999824523926 6.691999912261963,8.730999946594238 C7.458000183105469,8.142999649047852 8.142999649047852,7.458000183105469 8.730999946594238,6.691999912261963 C9.008999824523926,6.328999996185303 8.852999687194824,5.816999912261963 8.484999656677246,5.546000003814697 C7.534999847412109,4.8480000495910645 7.060999870300293,3.8570001125335693 7.390999794006348,3.061000108718872 C7.7210001945495605,2.265000104904175 8.756999969482422,1.899999976158142 9.92300033569336,2.078000068664551 C10.375,2.1470000743865967 10.847000122070312,1.8949999809265137 10.906000137329102,1.4420000314712524 C10.968000411987305,0.9700000286102295 11,0.48899999260902405 11,0 C11,-0.48899999260902405 10.968000411987305,-0.9700000286102295 10.906000137329102,-1.4420000314712524 C10.847000122070312,-1.8949999809265137 10.375,-2.1470000743865967 9.92300033569336,-2.078000068664551 C8.756999969482422,-1.899999976158142 7.7210001945495605,-2.265000104904175 7.390999794006348,-3.061000108718872 C7.060999870300293,-3.8570001125335693 7.534999847412109,-4.8480000495910645 8.484999656677246,-5.546000003814697 C8.852999687194824,-5.816999912261963 9.008999824523926,-6.329999923706055 8.730999946594238,-6.691999912261963 C8.142999649047852,-7.458000183105469 7.458000183105469,-8.142999649047852 6.691999912261963,-8.730999946594238 C6.328999996185303,-9.008999824523926 5.817999839782715,-8.852999687194824 5.546999931335449,-8.484999656677246 C4.848999977111816,-7.534999847412109 3.8580000400543213,-7.060999870300293 3.062000036239624,-7.390999794006348 C2.2660000324249268,-7.7210001945495605 1.9010000228881836,-8.756999969482422 2.0789999961853027,-9.92300033569336 C2.1480000019073486,-10.375 1.8949999809265137,-10.847000122070312 1.4420000314712524,-10.906000137329102 C0.9700000286102295,-10.968000411987305 0.48899999260902405,-11 0,-11 C-0.48899999260902405,-11 -0.9700000286102295,-10.968000411987305 -1.4420000314712524,-10.906000137329102z M4,0 C4,2.2090001106262207 2.2090001106262207,4 0,4 C-2.2090001106262207,4 -4,2.2090001106262207 -4,0 C-4,-2.2090001106262207 -2.2090001106262207,-4 0,-4 C2.2090001106262207,-4 4,-2.2090001106262207 4,0z"></path>
-                    </g>
-                  </g>
-                </g>
-              </g>
-            </svg>
-          </button>
-        </div>
+                  <Cogs />
+                </button>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>Open settings</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   )
