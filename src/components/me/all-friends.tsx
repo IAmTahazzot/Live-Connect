@@ -9,32 +9,32 @@ import { BlockIcons, UserBlock, UserBlockButton } from './user-block'
 import axios from 'axios'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import { useGlobalData } from '@/hooks/use-global-data'
 
 export const AllFriends = () => {
-  const [friends, setFriends] = useState<{ id: string; profile: Profile }[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
-  const [currentUserId, setCurrentUserId] = useState<string>('')
+  const { profile, friends: allFriends } = useGlobalData()
+  const [friends, setFriends] = useState<{ id: string; profile: Profile }[]>(allFriends || [])
   const [removing, setRemoving] = useState<boolean>(false)
   const [query, setQuery] = useState<string>('')
   const router = useRouter()
 
   useEffect(() => {
-    const fetchFriends = async () => {
-      const res = await fetch('/api/friends/all')
-      const data = await res.json()
-      const userRes = await axios.get('/api/users/me')
-      setCurrentUserId(userRes.data.id || '')
-      setFriends(data)
-      setLoading(false)
-    }
-    fetchFriends()
-  }, [])
+    setFriends(allFriends)
+  }, [allFriends, profile])
 
-  if (loading) {
+  if (!profile) {
     return (
-      <div className="overflow-y-auto h-[90%] my-4">
-        <div className="h-8 bg-[hsl(var(--background-modifier-selected)/.3)] rounded-full mx-4 my-2 animate-pulse"></div>
-        <PendingBlockLoader clone={15} />
+      <div className="grid grid-cols-[1fr_350px] h-full overflow-hidden">
+        <div className="px-6 py-4 h-full overflow-hidden">
+          <div className="h-8 bg-[hsl(var(--background-modifier-selected)/.3)] rounded-full mx-4 my-2 animate-pulse"></div>
+          <PendingBlockLoader clone={15} />
+        </div>
+        <div className="grid place-items-center border-l-[1px] border-solid border-zinc-600/50 px-4 py-6 h-full">
+          <div className="space-y-3">
+            <WumpusSleeping />
+            <p className="text-gray-500 text-sm text-center">This is where wumpus sleep...</p>
+          </div>
+        </div>
       </div>
     )
   }
@@ -98,13 +98,21 @@ export const AllFriends = () => {
               <UserBlock
                 key={friend.id}
                 profile={friend.profile}
-                currentUserId={currentUserId}
+                currentUserId={profile.id}
                 requestForbidden
                 action={
                   removing ? (
                     <div className="loader mx-4"></div>
                   ) : (
                     <>
+                      <UserBlockButton
+                        label="Message"
+                        icon={BlockIcons.MESSAGE}
+                        onClick={() => {
+                          toast.info('Message ' + friend.profile.id )
+                        }}
+                      />
+
                       <UserBlockButton
                         label="Remove"
                         icon={BlockIcons.REJECT}

@@ -9,30 +9,24 @@ import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { WumpusSleeping } from '@/lib/doodles'
+import { useGlobalData } from '@/hooks/use-global-data'
 
 export const PendingRequests = () => {
+  const { friendRequests, profile } = useGlobalData()
   const [pendingRequests, setPendingRequests] = useState<{
     requester: (FriendRequest & { profile: Profile })[] // People who have sent you friend requests
     pending: (FriendRequest & { friend: Profile })[] // People you have sent friend requests to
-  }>({ requester: [], pending: [] })
-  const [currentUserId, setCurrentUserId] = useState('')
-  const [loading, setLoading] = useState(true)
+  }>({ requester: friendRequests.requester, pending: friendRequests.pending })
   const [reqProcessing, setReqProcessing] = useState(false)
   const [query, setQuery] = useState<string>('')
   const router = useRouter()
 
   useEffect(() => {
-    const fetchRequests = async () => {
-      const res = await fetch('/api/friends/request')
-      const data = await res.json()
-      const userRes = await axios.get('/api/users/me')
-      setCurrentUserId(userRes.data.id || '')
-      setPendingRequests(data)
-      setLoading(false)
-    }
-
-    fetchRequests()
-  }, [])
+    setPendingRequests({
+      requester: friendRequests.requester,
+      pending: friendRequests.pending,
+    })
+  }, [friendRequests])
 
   const handleAccept = async (id: string) => {
     if (reqProcessing) {
@@ -88,11 +82,19 @@ export const PendingRequests = () => {
     }
   }
 
-  if (loading) {
+  if (!profile) {
     return (
-      <div className="overflow-y-auto h-[90%] my-4">
-        <div className="h-8 bg-[hsl(var(--background-modifier-selected)/.3)] rounded-full m-4 animate-pulse"></div>
-        <PendingBlockLoader clone={15} />
+      <div className="grid grid-cols-[1fr_350px] h-full overflow-hidden">
+        <div className="px-6 py-4 h-full overflow-hidden">
+          <div className="h-8 bg-[hsl(var(--background-modifier-selected)/.3)] rounded-full mx-4 my-2 animate-pulse"></div>
+          <PendingBlockLoader clone={15} />
+        </div>
+        <div className="grid place-items-center border-l-[1px] border-solid border-zinc-600/50 px-4 py-6 h-full">
+          <div className="space-y-3">
+            <WumpusSleeping />
+            <p className="text-gray-500 text-sm text-center">This is where wumpus sleep...</p>
+          </div>
+        </div>
       </div>
     )
   }
@@ -132,59 +134,57 @@ export const PendingRequests = () => {
 
             {/* SHOW ALL REQ AND PEN... */}
             <div className="h-full overflow-y-auto pb-24">
-              {currentUserId &&
-                filteredPendingRequests.map(req => (
-                  <UserBlock
-                    key={req.id}
-                    profile={req.friend}
-                    currentUserId={currentUserId}
-                    requestForbidden
-                    action={
+              {filteredPendingRequests.map(req => (
+                <UserBlock
+                  key={req.id}
+                  profile={req.friend}
+                  currentUserId={profile.id}
+                  requestForbidden
+                  action={
+                    <>
+                      <UserBlockButton
+                        label="Remove"
+                        icon={BlockIcons.REJECT}
+                        onClick={() => {
+                          handleAccept(req.id)
+                        }}
+                      />
+                    </>
+                  }
+                />
+              ))}
+
+              {/* Those who requested */}
+              {filteredRequesterRequests.map(req => (
+                <UserBlock
+                  key={req.id}
+                  profile={req.profile}
+                  currentUserId={profile.id}
+                  requestForbidden
+                  action={
+                    reqProcessing ? (
+                      <div className="loader mx-4"></div>
+                    ) : (
                       <>
                         <UserBlockButton
-                          label="Remove"
-                          icon={BlockIcons.REJECT}
+                          label="Accept"
+                          icon={BlockIcons.ACCEPT}
                           onClick={() => {
                             handleAccept(req.id)
                           }}
                         />
+                        <UserBlockButton
+                          label="Reject"
+                          icon={BlockIcons.REJECT}
+                          onClick={() => {
+                            handleReject(req.id)
+                          }}
+                        />
                       </>
-                    }
-                  />
-                ))}
-
-              {/* Those who requested */}
-              {currentUserId &&
-                filteredRequesterRequests.map(req => (
-                  <UserBlock
-                    key={req.id}
-                    profile={req.profile}
-                    currentUserId={currentUserId}
-                    requestForbidden
-                    action={
-                      reqProcessing ? (
-                        <div className="loader mx-4"></div>
-                      ) : (
-                        <>
-                          <UserBlockButton
-                            label="Accept"
-                            icon={BlockIcons.ACCEPT}
-                            onClick={() => {
-                              handleAccept(req.id)
-                            }}
-                          />
-                          <UserBlockButton
-                            label="Reject"
-                            icon={BlockIcons.REJECT}
-                            onClick={() => {
-                              handleReject(req.id)
-                            }}
-                          />
-                        </>
-                      )
-                    }
-                  />
-                ))}
+                    )
+                  }
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -201,6 +201,14 @@ export const PendingRequests = () => {
 
 export const PendingBlockLoader = ({ clone = 1 }: { clone: number }) => {
   const opacity = 1
+
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
 
   return Array.from({ length: clone }).map((_, i) => (
     <div key={i}>

@@ -17,20 +17,24 @@ export const UserBlock = ({ action, profile, currentUserId, requestForbidden }: 
   const { onOpen } = useModal()
 
   return (
-    <div className="grid grid-cols-[32px_1fr_auto] gap-2 rounded-sm bg p-3 hover:bg-[hsl(var(--background-modifier-selected)/.3)] group">
-      <div className="relative w-6 h-6 rounded-full bg-gray-300">
-        <Image src={profile.imageUrl!} alt={'Profile Picture'} fill className="rounded-full object-cover" />
+    <div className="grid grid-cols-[32px_1fr_auto] gap-3 items-center rounded-sm bg p-3 hover:bg-[hsl(var(--background-modifier-selected)/.3)] group">
+      <div className="relative w-8 h-8 rounded-full bg-gray-300">
+        <Image
+          src={profile.imageUrl!}
+          alt={'Profile Picture'}
+          fill
+          className="rounded-full object-cover"
+          sizes="(max-width: 640px) 50px, 100px"
+        />
       </div>
       <span
-        className="hover:underline cursor-pointer"
+        className="hover:underline cursor-pointer font-medium"
         onClick={() => {
           onOpen(MODAL_TYPES.PROFILE, { profile, currentUserId, requestForbidden })
         }}>
         {profile.name}
       </span>
-      <div className="flex items-center gap-x-2 transition-opacity duration-300">
-        {action}
-      </div>
+      <div className="flex items-center gap-x-2 transition-opacity duration-300">{action}</div>
     </div>
   )
 }
@@ -39,6 +43,7 @@ export enum BlockIcons {
   ADD = 'add',
   ACCEPT = 'accept',
   REJECT = 'reject',
+  MESSAGE = 'message',
 }
 
 const Icons = ({ name }: { name: BlockIcons }) => {
@@ -48,8 +53,8 @@ const Icons = ({ name }: { name: BlockIcons }) => {
         aria-hidden="true"
         role="img"
         xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
+        width="24"
+        height="24"
         fill="none"
         viewBox="0 0 24 24">
         <path
@@ -60,8 +65,22 @@ const Icons = ({ name }: { name: BlockIcons }) => {
           fill="currentColor"></path>
       </svg>
     ),
-    [BlockIcons.ACCEPT]: <Check size={18} />,
-    [BlockIcons.REJECT]: <X size={18} />,
+    [BlockIcons.ACCEPT]: <Check size={24} />,
+    [BlockIcons.REJECT]: <X size={24} />,
+    [BlockIcons.MESSAGE]: (
+      <svg
+        aria-hidden="true"
+        role="img"
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        fill="none"
+        viewBox="0 0 24 24">
+        <path
+          fill="currentColor"
+          d="M12 22a10 10 0 1 0-8.45-4.64c.13.19.11.44-.04.61l-2.06 2.37A1 1 0 0 0 2.2 22H12Z"></path>
+      </svg>
+    ),
   }
 
   return ICONS[name]
@@ -70,7 +89,7 @@ const Icons = ({ name }: { name: BlockIcons }) => {
 export const UserBlockButton = ({ icon, label, onClick }: { icon: BlockIcons; label: string; onClick: () => void }) => {
   return (
     <div
-      className="w-6 h-6 text-gray-400 hover:bg-[hsl(var(--background-deep-dark),.8)] rounded-full grid place-items-center cursor-pointer"
+      className="w-10 h-10 text-gray-400 hover:bg-[hsl(var(--background-deep-dark),.8)] rounded-full grid place-items-center cursor-pointer"
       onClick={onClick}>
       <Icons name={icon} />
     </div>

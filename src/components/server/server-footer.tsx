@@ -19,7 +19,14 @@ export const ServerFooter = ({ profile }: ServerFooterProps) => {
     <div className="grid grid-cols-[minmax(100px,130px)_auto] items-center justify-between dark:bg-[hsla(var(--background-deep-dark),.8)] px-2 py-[6px] group">
       <div className="flex items-center gap-2 dark:hover:bg-[hsla(var(--background-modifier-selected)/.5)] rounded-sm p-[2px] select-none cursor-pointer overflow-hidden">
         <div className="w-8 h-8 relative rounded-full shrink-0">
-          <Image src={profile.imageUrl} fill className="rounded-full" alt="user profile picture" priority={true} />
+          <Image
+            src={profile.imageUrl}
+            fill
+            className="rounded-full"
+            alt="user profile picture"
+            priority={true}
+            sizes="(max-width: 640px) 50px, 100px"
+          />
           <div className=" box-content absolute h-[10px] w-[10px] rounded-full bg-emerald-500 -bottom-[2px] -right-1 z-10 border-solid border-[4px] dark:border-[#212226]"></div>
         </div>
         <div className="flex flex-col gap-0">
@@ -52,7 +59,7 @@ export const ServerFooter = ({ profile }: ServerFooterProps) => {
 
         <TooltipProvider>
           <Tooltip delayDuration={0}>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <div className="rounded-sm dark:hover:bg-[hsla(var(--background-modifier-selected)/.3)] p-[2px] h-8 w-8 flex items-center justify-center group/cog cursor-pointer">
                 <button
                   className="group-hover/cog:rotate-180 duration-1000 delay-300"
