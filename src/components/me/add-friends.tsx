@@ -29,12 +29,16 @@ export const AddFriends = () => {
   useEffect(() => {
     const fetchUserProfiles = async () => {
       setIsLoading(true)
-      const res = await axios.get('/api/users/looking-for-friends')
-      const requestNotAllowedRes = await axios.get('/api/friends/request-forbidden')
-      const userRes = await axios.get('/api/users/me')
-      setCurrentUserId(userRes.data.id || '')
-      setRequestNotAllowed(requestNotAllowedRes.data)
-      setLookingForFriendsUsers(res.data)
+      try {
+        const res = await axios.get('/api/users/looking-for-friends')
+        const requestNotAllowedRes = await axios.get('/api/friends/request-forbidden')
+        const userRes = await axios.get('/api/users/me')
+        setCurrentUserId(userRes.data.id || '')
+        setRequestNotAllowed(requestNotAllowedRes.data)
+        setLookingForFriendsUsers(res.data)
+      } catch (error) {
+        toast.error('Failed to fetch user profiles, please check your connection and try again!')
+      }
       setIsLoading(false)
     }
 
@@ -49,35 +53,40 @@ export const AddFriends = () => {
   })
 
   const findAndRequest = async (keywords: z.infer<typeof searchForm>) => {
-    setIsRequesting(true)
-    const url = qs.stringifyUrl({
-      url: '/api/friends/request',
-      query: {
-        keywords: keywords.keywords,
-      },
-    })
+    try {
+      setIsRequesting(true)
+      const url = qs.stringifyUrl({
+        url: '/api/friends/request',
+        query: {
+          keywords: keywords.keywords,
+        },
+      })
 
-    const req = await fetch(url, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        currentUserId: currentUserId,
-      }),
-    })
+      const req = await fetch(url, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          currentUserId: currentUserId,
+        }),
+      })
 
-    const res = await req.json()
-    setIsRequesting(false)
+      const res = await req.json()
+      setIsRequesting(false)
 
-    if (req.status === 200) {
-      toast.success(res.message)
-    } else {
-      toast.info(res.message)
+      if (req.status === 200) {
+        toast.success(res.message)
+      } else {
+        toast.info(res.message)
+      }
+
+      form.reset()
+      router.refresh()
+    } catch (err) {
+      toast.error('Failed to send friend request')
+      setIsRequesting(false)
     }
-
-    form.reset()
-    router.refresh()
   }
 
   return (

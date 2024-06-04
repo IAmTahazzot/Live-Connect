@@ -9,6 +9,7 @@ import SocketProvider from '@/components/providers/socket-provider'
 import { QueryProvider } from '@/components/providers/query-provider'
 import { PanelProvider } from '@/components/providers/panel-provider'
 import { Toaster } from '@/components/ui/sonner'
+import { NetworkProvider } from '@/components/providers/network'
 
 export const metadata: Metadata = {
   title: 'LC (Live Connect)',
@@ -20,14 +21,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={cn('dark:bg-[hsl(var(--background-deep-dark))]')}>
-          <ThemeProvider attribute={'class'} defaultTheme={'dark'} enableSystem={false} storageKey={'__THEME'}>
-            <SocketProvider>
-              <ModalProvider />
-              <PanelProvider />
-              <Toaster />
-              <QueryProvider>{children}</QueryProvider>
-            </SocketProvider>
-          </ThemeProvider>
+          <NetworkProvider>
+            <ThemeProvider attribute={'class'} defaultTheme={'dark'} enableSystem={false} storageKey={'__THEME'}>
+              <SocketProvider>
+                <ModalProvider />
+                <PanelProvider />
+                <Toaster />
+                <QueryProvider>{children}</QueryProvider>
+              </SocketProvider>
+            </ThemeProvider>
+          </NetworkProvider>
         </body>
       </html>
     </ClerkProvider>

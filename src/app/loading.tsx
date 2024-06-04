@@ -1,44 +1,12 @@
 'use client'
 
-const amazingFacts: { text: string; deprecated: boolean }[] = [
-  {
-    text: 'You are amazing',
-    deprecated: false,
-  },
-  {
-    text: 'I love you 💞',
-    deprecated: false,
-  },
-  {
-    text: 'You are beautiful',
-    deprecated: false,
-  },
-  {
-    text: 'You are handsome a person 😍',
-    deprecated: false,
-  },
-  {
-    text: 'You are a good person',
-    deprecated: false,
-  },
-  {
-    text: 'You love me 💕',
-    deprecated: false,
-  },
-  {
-    text: 'I think about you all the time',
-    deprecated: false,
-  },
-  {
-    text: 'I love you so much',
-    deprecated: false,
-  },
-]
+import { loadingMessages } from '@/lib/loadingMessages'
 
 const Loading = () => {
   // get a non-deprecated fact and don't repeat the last one
-  let randomFact = amazingFacts.filter(fact => !fact.deprecated)[Math.floor(Math.random() * (amazingFacts.length - 1))]
-    .text
+  let randomFact = loadingMessages.filter(fact => !fact.deprecated)[
+    Math.floor(Math.random() * (loadingMessages.length - 1))
+  ].text
 
   return (
     <div className={'h-full min-h-screen flex items-center justify-center w-full'}>
