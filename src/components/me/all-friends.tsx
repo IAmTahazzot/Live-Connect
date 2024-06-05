@@ -1,6 +1,6 @@
 'use client'
 
-import { Friend, Profile } from '@prisma/client'
+import { Conversation, Friend, Profile } from '@prisma/client'
 import { SearchIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { PendingBlockLoader } from './pending-requests'
@@ -12,9 +12,10 @@ import { useRouter } from 'next/navigation'
 import { useGlobalData } from '@/hooks/use-global-data'
 
 export const AllFriends = () => {
-  const { profile, friends: allFriends } = useGlobalData()
+  const { profile, friends: allFriends, syncFriends } = useGlobalData()
   const [friends, setFriends] = useState<{ id: string; profile: Profile }[]>(allFriends || [])
   const [removing, setRemoving] = useState<boolean>(false)
+  const [openingConversation, setOpeningConversation] = useState<boolean>(false)
   const [query, setQuery] = useState<string>('')
   const router = useRouter()
 
@@ -63,6 +64,34 @@ export const AllFriends = () => {
     } finally {
       setFriends(friends.filter(friend => friend.id !== id))
       setRemoving(false)
+      syncFriends()
+    }
+  }
+
+  const openConversation = async (conversationFrom: string, conversationTo: string) => {
+    try {
+      setOpeningConversation(true)
+      const res = await axios.post('/api/conversation', {
+        conversationFrom,
+        conversationTo,
+      })
+
+      if (res.status !== 200) {
+        throw new Error('Failed to send message, Trying to sync with the server to fix!')
+      }
+
+      const { conversationId } = res.data as { conversationId: string }
+      router.push(`/me/${conversationId}`)
+    } catch (e) {
+      toast.error('Failed to open conversation, Trying to sync with the server to fix!')
+
+      if (typeof window !== 'undefined') {
+        window.location.reload()
+      } else {
+        router.refresh()
+      }
+    } finally {
+      setOpeningConversation(false)
     }
   }
 
@@ -101,7 +130,7 @@ export const AllFriends = () => {
                 currentUserId={profile.id}
                 requestForbidden
                 action={
-                  removing ? (
+                  removing || openingConversation ? (
                     <div className="loader mx-4"></div>
                   ) : (
                     <>
@@ -109,7 +138,7 @@ export const AllFriends = () => {
                         label="Message"
                         icon={BlockIcons.MESSAGE}
                         onClick={() => {
-                          toast.info('Message ' + friend.profile.id )
+                          openConversation(profile.id, friend.profile.id)
                         }}
                       />
 

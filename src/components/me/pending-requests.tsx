@@ -12,7 +12,7 @@ import { WumpusSleeping } from '@/lib/doodles'
 import { useGlobalData } from '@/hooks/use-global-data'
 
 export const PendingRequests = () => {
-  const { friendRequests, profile } = useGlobalData()
+  const { friendRequests, profile, syncFriends, syncFriendRequests } = useGlobalData()
   const [pendingRequests, setPendingRequests] = useState<{
     requester: (FriendRequest & { profile: Profile })[] // People who have sent you friend requests
     pending: (FriendRequest & { friend: Profile })[] // People you have sent friend requests to
@@ -46,6 +46,8 @@ export const PendingRequests = () => {
         router.refresh()
       }
     } finally {
+      syncFriends()
+      syncFriendRequests()
       setPendingRequests({
         requester: pendingRequests.requester.filter(req => req.id !== id),
         pending: pendingRequests.pending,
@@ -74,6 +76,7 @@ export const PendingRequests = () => {
         router.refresh()
       }
     } finally {
+      syncFriendRequests()
       setPendingRequests({
         requester: pendingRequests.requester.filter(req => req.id !== id),
         pending: pendingRequests.pending.filter(req => req.id !== id),
@@ -92,7 +95,7 @@ export const PendingRequests = () => {
         <div className="grid place-items-center border-l-[1px] border-solid border-zinc-600/50 px-4 py-6 h-full">
           <div className="space-y-3">
             <WumpusSleeping />
-            <p className="text-gray-500 text-sm text-center">This is where wumpus sleep...</p>
+            <p className="text-gray-500 text-sm text-center font-medium">This is where wumpus sleep...</p>
           </div>
         </div>
       </div>
@@ -128,7 +131,7 @@ export const PendingRequests = () => {
 
           <div className="h-full overflow-hidden">
             <h3 className="text-xs uppercase font-sans text-gray-400 font-medium my-4 tracking-wide">
-              Pending — {pendingRequests.pending.length}
+              Pending — {friendRequests.pending.length + friendRequests.requester.length}
             </h3>
             <div className="h-[1px] bg-zinc-600/50 mb-3"></div>
 

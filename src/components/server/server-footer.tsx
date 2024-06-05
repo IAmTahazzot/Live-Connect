@@ -30,9 +30,7 @@ export const ServerFooter = ({ profile }: ServerFooterProps) => {
           <div className=" box-content absolute h-[10px] w-[10px] rounded-full bg-emerald-500 -bottom-[2px] -right-1 z-10 border-solid border-[4px] dark:border-[#212226]"></div>
         </div>
         <div className="flex flex-col gap-0">
-          <h4 className="text-sm mb-0 text-ellipsis whitespace-nowrap w-[90px] overflow-hidden">
-            Some motherfuckerseur
-          </h4>
+          <h4 className="text-sm mb-0 text-ellipsis whitespace-nowrap w-[90px] overflow-hidden">{profile.name}</h4>
           <div className="relative h-4 overflow-hidden">
             <p className="text-[12px] text-gray-400 m-0 transition-transform duration-200 group-hover:-translate-y-4">
               Online
@@ -40,7 +38,7 @@ export const ServerFooter = ({ profile }: ServerFooterProps) => {
             <p className="text-[12px] text-gray-400 m-0 transition-transform duration-200 group-hover:-translate-y-5">
               {profile.username}
             </p>
-          </div>
+        </div>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-1">
