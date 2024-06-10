@@ -1,3 +1,5 @@
+// [NOTE]: About The UserBlock component: The "Block" keyword is used to represent a UI component to show user information and actions.
+
 'use client'
 
 import { cn } from '@/lib/utils'
@@ -8,7 +10,7 @@ import { BlockIcons, UserBlock, UserBlockButton } from './user-block'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { WumpusSleeping } from '@/lib/doodles'
+import { WumpusSleeping, WumpusWalking } from '@/lib/doodles'
 import { useGlobalData } from '@/hooks/use-global-data'
 
 export const PendingRequests = () => {
@@ -110,6 +112,17 @@ export const PendingRequests = () => {
     req.profile.name.toLowerCase().includes(query.toLowerCase())
   )
 
+  if (!filteredPendingRequests.length && !filteredRequesterRequests.length) {
+    return (
+      <div className="grid place-items-center h-full overflow-hidden">
+        <div className="space-y-10  ">
+          <WumpusWalking />
+          <p className="text-gray-400 text-center">Huh? No pending requests?</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <>
       <div className="grid grid-cols-[1fr_350px] h-full overflow-hidden">
@@ -131,7 +144,7 @@ export const PendingRequests = () => {
 
           <div className="h-full overflow-hidden">
             <h3 className="text-xs uppercase font-sans text-gray-400 font-medium my-4 tracking-wide">
-              Pending — {friendRequests.pending.length + friendRequests.requester.length}
+              Pending ({friendRequests.pending.length + friendRequests.requester.length})
             </h3>
             <div className="h-[1px] bg-zinc-600/50 mb-3"></div>
 
@@ -149,7 +162,7 @@ export const PendingRequests = () => {
                         label="Remove"
                         icon={BlockIcons.REJECT}
                         onClick={() => {
-                          handleAccept(req.id)
+                          handleReject(req.id)
                         }}
                       />
                     </>
@@ -194,7 +207,7 @@ export const PendingRequests = () => {
         <div className="grid place-items-center border-l-[1px] border-solid border-zinc-600/50 px-4 py-6 h-full">
           <div className="space-y-3">
             <WumpusSleeping />
-            <p className="text-gray-500 text-sm text-center">This is where wumpus sleep...</p>
+            <p className="text-gray-500 text-sm text-center font-medium">This is where wumpus sleep...</p>
           </div>
         </div>
       </div>

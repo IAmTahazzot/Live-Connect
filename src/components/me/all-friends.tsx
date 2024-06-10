@@ -1,6 +1,6 @@
 'use client'
 
-import { Conversation, Friend, Profile } from '@prisma/client'
+import { Profile } from '@prisma/client'
 import { SearchIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { PendingBlockLoader } from './pending-requests'
@@ -97,6 +97,17 @@ export const AllFriends = () => {
 
   const filteredFriends = friends.filter(friend => friend.profile.name.toLowerCase().includes(query.toLowerCase()))
 
+  if (!filteredFriends.length) {
+    return (
+      <div className="grid place-items-center h-full overflow-hidden">
+        <div className="space-y-10  ">
+          <WumpusSleeping />
+          <p className="text-gray-400 text-center">No one&apos;s around to play with wumpus!</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="grid grid-cols-[1fr_350px] h-full overflow-hidden">
       <div className="px-6 py-4 h-full overflow-hidden">
@@ -117,7 +128,7 @@ export const AllFriends = () => {
 
         <div className="h-full overflow-hidden">
           <h3 className="text-xs uppercase font-sans text-gray-400 font-medium my-4 tracking-wide">
-            Friends - {friends.length || 0}
+            Friends ({friends.length || 0})
           </h3>
           <div className="h-[1px] bg-zinc-600/50 mb-3"></div>
 
@@ -165,7 +176,7 @@ export const AllFriends = () => {
       <div className="grid place-items-center border-l-[1px] border-solid border-zinc-600/50 px-4 py-6 h-full">
         <div className="space-y-3">
           <WumpusSleeping />
-          <p className="text-gray-500 text-sm text-center">This is where wumpus sleep...</p>
+          <p className="text-gray-500 text-sm text-center font-medium">This is where wumpus sleep...</p>
         </div>
       </div>
     </div>

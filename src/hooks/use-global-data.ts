@@ -3,6 +3,8 @@ import { FriendRequest, Profile } from '@prisma/client'
 import { create } from 'zustand'
 
 interface GlobalStore {
+  syncAll: () => void
+
   profile: Profile | null
   syncProfile: () => void
 
@@ -17,8 +19,6 @@ interface GlobalStore {
 
   finderData: FinderData[]
   syncFinderData: () => void
-
-  syncAll: () => void
 }
 
 export const useGlobalData = create<GlobalStore>((set, get) => {

@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Hash } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import Image from 'next/image'

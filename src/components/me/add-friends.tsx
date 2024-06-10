@@ -13,12 +13,14 @@ import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ScrollArea } from '../ui/scroll-area'
+import { useGlobalData } from '@/hooks/use-global-data'
 
 const searchForm = z.object({
   keywords: z.string(),
 })
 
 export const AddFriends = () => {
+  const { syncFriendRequests } = useGlobalData()
   const [lookingForFriendsUsers, setLookingForFriendsUsers] = useState<Profile[]>([])
   const [requestNotAllowed, setRequestNotAllowed] = useState<Profile[]>([])
   const [currentUserId, setCurrentUserId] = useState('')
@@ -76,6 +78,7 @@ export const AddFriends = () => {
       setIsRequesting(false)
 
       if (req.status === 200) {
+        syncFriendRequests()
         toast.success(res.message)
       } else {
         toast.info(res.message)

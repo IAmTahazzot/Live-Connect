@@ -3,8 +3,8 @@
 import { Profile } from '@prisma/client'
 import Image from 'next/image'
 import { MODAL_TYPES, useModal } from '@/hooks/use-modal-store'
-import { useEffect, useState } from 'react'
 import { Check, X } from 'lucide-react'
+import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 
 type UserBlockProps = {
   action?: React.ReactNode
@@ -88,10 +88,17 @@ const Icons = ({ name }: { name: BlockIcons }) => {
 
 export const UserBlockButton = ({ icon, label, onClick }: { icon: BlockIcons; label: string; onClick: () => void }) => {
   return (
-    <div
-      className="w-10 h-10 text-gray-400 hover:bg-[hsl(var(--background-deep-dark),.8)] rounded-full grid place-items-center cursor-pointer"
-      onClick={onClick}>
-      <Icons name={icon} />
-    </div>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger>
+          <div
+            className="w-10 h-10 text-gray-400 hover:bg-[hsl(var(--background-deep-dark),.8)] rounded-full grid place-items-center cursor-pointer"
+            onClick={onClick}>
+            <Icons name={icon} />
+          </div>
+        </TooltipTrigger>
+        <TooltipContent>{label}</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 }
