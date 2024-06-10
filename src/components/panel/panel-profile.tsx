@@ -1,7 +1,6 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Profile } from '@prisma/client'
 import React, { useEffect, useState } from 'react'
 import { Hash } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -10,6 +9,7 @@ import { z } from 'zod'
 import { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { toast } from 'sonner'
 import { Switch } from '../input/switch'
+import { useGlobalData } from '@/hooks/use-global-data'
 
 const profileFormSchema = z.object({
   name: z
@@ -21,8 +21,7 @@ const profileFormSchema = z.object({
 })
 
 export const PanelProfile = () => {
-  const [user, setUser] = useState<Profile>()
-  const [gettingUser, setGettingUser] = useState(true)
+  const { profile, syncProfile } = useGlobalData()
 
   const form = useForm({
     resolver: zodResolver(profileFormSchema),
@@ -34,31 +33,14 @@ export const PanelProfile = () => {
   })
 
   useEffect(() => {
-    const getUser = async () => {
-      setGettingUser(true)
-      const data = await fetch('/api/users/', {
-        method: 'GET',
-      })
-
-      const response = await data.json()
-
-      if (response.status === 401) {
-        alert('Unauthorized')
-        return
-      }
-
-      const user = response.body.data as Profile
-
-      form.setValue('name', user.name || '')
-      form.setValue('bio', user.bio || '')
-      form.setValue('lookingForFriends', user.lookingForFriends || false)
-
-      setUser(user)
-      setGettingUser(false)
+    if (!profile) {
+      return
     }
 
-    getUser()
-  }, [])
+    form.setValue('name', profile.name || '')
+    form.setValue('bio', profile.bio || '')
+    form.setValue('lookingForFriends', profile.lookingForFriends || false)
+  }, [form, profile])
 
   useEffect(() => {
     const bioDOM = document.querySelector('textarea')
@@ -68,7 +50,7 @@ export const PanelProfile = () => {
       const height = bioDOM.scrollHeight
       bioDOM.style.height = `${height < 64 ? 64 : height}px`
     }
-  }, [user])
+  }, [profile])
 
   const onSubmit = async (data: z.infer<typeof profileFormSchema>) => {
     try {
@@ -88,6 +70,7 @@ export const PanelProfile = () => {
       }
 
       if (response.status === 200) {
+        syncProfile()
         toast.success('Profile updated successfully', {
           position: 'bottom-right',
         })
@@ -98,7 +81,7 @@ export const PanelProfile = () => {
     }
   }
 
-  if (gettingUser) {
+  if (!profile) {
     return (
       <div className="animate-pulse">
         <h1 className="text-[20px] font-semibold mb-4">Profile</h1>
@@ -124,7 +107,7 @@ export const PanelProfile = () => {
     )
   }
 
-  if (!user) {
+  if (!profile) {
     return null
   }
 
@@ -167,7 +150,7 @@ export const PanelProfile = () => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   form.setValue('lookingForFriends', e.target.checked)
                 }}
-                isChecked={user.lookingForFriends}
+                isChecked={profile.lookingForFriends}
               />
             </div>
 
@@ -187,7 +170,7 @@ export const PanelProfile = () => {
             <div className="px-4">
               <div className="flex justify-between items-center">
                 <div className="relative h-24 w-24 rounded-full overflow-hidden border-[6px] border-solid border-[#232428] -translate-y-12">
-                  <Image src={user.imageUrl} alt="User profile" fill priority={true} className="object-cover" />
+                  <Image src={profile.imageUrl} alt="User profile" fill priority={true} className="object-cover" />
                 </div>
                 <TooltipProvider>
                   <Tooltip>
@@ -199,7 +182,7 @@ export const PanelProfile = () => {
                       </div>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>{user.userId}</p>
+                      <p>{profile.userId}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -207,7 +190,7 @@ export const PanelProfile = () => {
 
               <div className="bg-[#111214] rounded-[6px] p-4 mb-6">
                 <h2 className="text-[20px] font-semibold mb-1">{form.watch('name')}</h2>
-                <p className="text-sm">{user.username}</p>
+                <p className="text-sm">{profile.username}</p>
 
                 <div className="h-[1px] bg-[#2a2c30] my-6"></div>
 

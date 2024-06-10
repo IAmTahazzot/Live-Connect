@@ -1,41 +1,22 @@
 'use client'
 
-import { Profile } from '@prisma/client'
 import { Hash } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import { PanelProfile } from './panel-profile'
 import { toast } from 'sonner'
+import { useGlobalData } from '@/hooks/use-global-data'
 
 type PanelAccountProps = {
   setActiveTab: React.Dispatch<React.SetStateAction<{ name: string; component: React.ReactNode }>>
 }
 
 export const PanelAccount = ({ setActiveTab }: PanelAccountProps) => {
-  const [user, setUser] = useState<Profile>()
+  const { profile } = useGlobalData()
   const [deleteAccount, setDeleteAccount] = useState<boolean>(false)
   const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
-  useEffect(() => {
-    const getUser = async () => {
-      const data = await fetch('/api/users/', {
-        method: 'GET',
-      })
-
-      const response = await data.json()
-
-      if (response.status === 401) {
-        alert('Unauthorized')
-        return
-      }
-
-      setUser(response.body.data)
-    }
-
-    getUser()
-  }, [])
-
-  if (!user) {
+  if (!profile) {
     return (
       <div>
         <div className="animate-pulse">
@@ -104,15 +85,15 @@ export const PanelAccount = ({ setActiveTab }: PanelAccountProps) => {
             <div className="flex justify-between mt-6 mb-2">
               <div className="flex gap-x-3">
                 <div className="relative h-24 w-24 rounded-full overflow-hidden border-[6px] border-solid border-[hsl(var(--background-deep-dark))] -translate-y-12">
-                  <Image src={user.imageUrl} alt="User profile" fill priority={true} className="object-cover" />
+                  <Image src={profile.imageUrl} alt="User profile" fill priority={true} className="object-cover" />
                 </div>
                 <div className="space-y-2">
-                  <h2 className="text-[18px] font-semibold">{user.name}</h2>
+                  <h2 className="text-[18px] font-semibold">{profile.name}</h2>
                   <div className="flex items-center gap-x-2 rounded-lg py-1 px-2 bg-[hsl(var(--background-primary))]">
                     <div className="bg-emerald-500 h-4 w-4 rounded-full flex items-center justify-center">
                       <Hash size={12} className="text-black" />
                     </div>
-                    <span className="text-sm">{user.userId}</span>
+                    <span className="text-sm">{profile.userId}</span>
                   </div>
                 </div>
               </div>
@@ -133,15 +114,15 @@ export const PanelAccount = ({ setActiveTab }: PanelAccountProps) => {
             <div className="bg-[hsl(var(--background-primary))] p-4 rounded-md space-y-6">
               <div className="space-y-1">
                 <h2 className="uppercase font-semibold text-gray-400 text-xs tracking-wide">Display name</h2>
-                <h2>{user.name}</h2>
+                <h2>{profile.name}</h2>
               </div>
               <div className="space-y-1">
                 <h2 className="uppercase font-semibold text-gray-400 text-xs tracking-wide">Username</h2>
-                <h2>{user.username}</h2>
+                <h2>{profile.username}</h2>
               </div>
               <div className="space-y-1">
                 <h2 className="uppercase font-semibold text-gray-400 text-xs tracking-wide">E-mail</h2>
-                <h2>{user.email}</h2>
+                <h2>{profile.email}</h2>
               </div>
             </div>
           </div>
@@ -183,7 +164,6 @@ export const PanelAccount = ({ setActiveTab }: PanelAccountProps) => {
               <button
                 className="text-sm font-medium bg-red-500 rounded-sm h-8 flex items-center justify-center text-white hover:bg-red-600 transition-colors duration-200 px-4 cursor-pointer"
                 onClick={() => {
-
                   // FIX: Remind user to transfer ownership of servers before deleting account
                   setIsDeleting(true)
                   fetch('/api/users/', {
