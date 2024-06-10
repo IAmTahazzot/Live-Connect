@@ -143,12 +143,12 @@ export const Finder = () => {
     if (KEY === 'ArrowDown') {
       if (result.length > 0) {
         setActiveIndex(prev => (prev + 1) % result.length)
-        refs[(activeIndex + 1) % result.length].current?.scrollIntoView({ behavior: 'smooth' })
+        refs[(activeIndex + 1) % result.length].current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       }
     } else if (KEY === 'ArrowUp') {
       if (result.length > 0) {
         setActiveIndex(prev => (prev - 1 + result.length) % result.length)
-        refs[(activeIndex - 1 + result.length) % result.length].current?.scrollIntoView({ behavior: 'smooth' })
+        refs[(activeIndex - 1 + result.length) % result.length].current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       }
     } else if (KEY === 'Enter') {
       openSelectedTypePage()
