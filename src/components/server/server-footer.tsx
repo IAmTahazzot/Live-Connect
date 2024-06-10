@@ -38,7 +38,7 @@ export const ServerFooter = ({ profile }: ServerFooterProps) => {
             <p className="text-[12px] text-gray-400 m-0 transition-transform duration-200 group-hover:-translate-y-5">
               {profile.username}
             </p>
-        </div>
+          </div>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-1">
@@ -46,8 +46,11 @@ export const ServerFooter = ({ profile }: ServerFooterProps) => {
           <Tooltip delayDuration={0}>
             <TooltipTrigger>
               <SignOutButton>
-                <div className="rounded-sm dark:hover:bg-[hsla(var(--background-modifier-selected)/.3)] p-[2px] h-8 w-8 flex items-center justify-center cursor-pointer">
-                  <LiaSignOutAltSolid size={24} className="text-gray-300" />
+                <div className="rounded-sm dark:hover:bg-[hsla(var(--background-modifier-selected)/.3)] p-[2px] h-8 w-8 flex items-center justify-center cursor-pointer group/sign-out">
+                  <LiaSignOutAltSolid
+                    size={24}
+                    className="text-gray-300 group-hover/sign-out:-rotate-[45deg] duration-300"
+                  />
                 </div>
               </SignOutButton>
             </TooltipTrigger>
@@ -57,15 +60,15 @@ export const ServerFooter = ({ profile }: ServerFooterProps) => {
 
         <TooltipProvider>
           <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
+            <TooltipTrigger
+              asChild
+              onClick={() => {
+                onOpen(PANEL_TYPES.PROFILE)
+              }}>
               <div className="rounded-sm dark:hover:bg-[hsla(var(--background-modifier-selected)/.3)] p-[2px] h-8 w-8 flex items-center justify-center group/cog cursor-pointer">
-                <button
-                  className="group-hover/cog:rotate-180 duration-1000 delay-300"
-                  onClick={() => {
-                    onOpen(PANEL_TYPES.PROFILE)
-                  }}>
-                  <Cogs />
-                </button>
+                <div className="group-hover/cog:rotate-180 duration-1000 delay-200">
+                  <Cogs size={21} />
+                </div>
               </div>
             </TooltipTrigger>
             <TooltipContent>Open settings</TooltipContent>

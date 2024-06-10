@@ -2,7 +2,7 @@
 
 import { usePanel } from '@/hooks/use-panel'
 import { cn } from '@/lib/utils'
-import { useEffect, useState } from 'react'
+import { KeyboardEvent, useEffect, useState } from 'react'
 import { PanelProfile } from './panel-profile'
 import { PanelAccount } from './panel-account'
 
@@ -68,16 +68,20 @@ export const Panel = () => {
     if (serverDOM && isOpen) {
       serverDOM.classList.add('anim-push-back')
     }
-  }, [isOpen])
 
-  useEffect(() => {
     // close panel on escape key
-    window.addEventListener('keydown', e => {
+    const close = (e: { key: string }) => {
       if (e.key === 'Escape') {
         closePanel()
       }
-    })
-  }, [])
+    }
+
+    if (isOpen) window.addEventListener('keydown', close)
+
+    return () => {
+      window.removeEventListener('keydown', close)
+    }
+  }, [isOpen])
 
   if (!isOpen) {
     return null

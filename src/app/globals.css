@@ -579,26 +579,14 @@ loader
   box-shadow: -6px 4px 12px #232428db;
 }
 
-#deleteAccountModal {
+#profileModal,
+#deleteAccountModal,
+#finder {
   animation: bounce-up 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   transform: scale(1);
 }
 
 @keyframes bounce-up {
-  from {
-    transform: scale(0.9);
-  }
-  to {
-    transform: scale(1);
-  }
-}
-
-#profileModal {
-  animation: profile-modal-scale-up 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-  transform: scale(1);
-}
-
-@keyframes profile-modal-scale-up {
   from {
     transform: scale(0.9);
   }

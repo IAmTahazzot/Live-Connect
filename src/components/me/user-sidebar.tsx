@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils'
 import { usePathname, useRouter } from 'next/navigation'
 import { X } from 'lucide-react'
 import { toast } from 'sonner'
+import { useFinder } from '@/hooks/use-finder'
 
 type UserSidebarProps = {
   profile: Profile
@@ -21,6 +22,7 @@ type UserSidebarProps = {
 
 export const UserSidebar = ({ profile, conversations }: UserSidebarProps) => {
   const [hydrated, setHydrated] = useState(false)
+  const { open } = useFinder()
 
   useEffect(() => {
     setHydrated(true)
@@ -39,7 +41,9 @@ export const UserSidebar = ({ profile, conversations }: UserSidebarProps) => {
   return (
     <div className="flex flex-col h-full">
       <div className="sitcky top-0 grid place-items-center shrink-0 h-12 p-2 slight-shadow">
-        <button className="w-full flex items-center justify-items-center rounded-sm bg-[hsl(var(--background-deep-dark))] text-[#9aa4ac] p-2 h-7 outline-0 text-sm">
+        <button
+          className="w-full flex items-center justify-items-center rounded-sm bg-[hsl(var(--background-deep-dark))] text-[#9aa4ac] p-2 h-7 outline-0 text-sm"
+          onClick={open}>
           Find or start a conversation
         </button>
       </div>

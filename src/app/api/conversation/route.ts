@@ -1,10 +1,10 @@
-// initializing user-user conversation
-// if conversation already exist, return the conversation ID
 
 import { db } from "@/lib/db";
 import { currentUser } from "@clerk/nextjs";
 import { NextRequest, NextResponse } from "next/server";
 
+// initializing user-user conversation
+// if conversation already exist, return the conversation ID
 // if not, create a new conversation and return the conversation ID
 export const POST = async (req: NextRequest) => {
   const user = await currentUser();
