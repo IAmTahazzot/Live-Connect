@@ -1,29 +1,7 @@
 import { db } from '@/lib/db'
+import { FinderDataType, FinderData  } from '@/lib/types'
 import { currentUser } from '@clerk/nextjs'
-import { Channel, Profile, Server } from '@prisma/client'
 import { NextRequest, NextResponse } from 'next/server'
-
-export enum FinderDataType {
-  SERVER = 'server',
-  FRIEND = 'friend',
-  CHANNEL = 'channel',
-}
-
-export type FinderData = (
-  | {
-      type: FinderDataType.CHANNEL
-      server: Server
-      channel: Channel
-    }
-  | {
-      type: FinderDataType.FRIEND
-      friend: Profile
-    }
-  | {
-      type: FinderDataType.SERVER
-      server: Server
-    }
-)
 
 export const GET = async (req: NextRequest) => {
   const loggedInUser = await currentUser()
@@ -121,9 +99,9 @@ export const GET = async (req: NextRequest) => {
       })
     }
 
+    return NextResponse.json(data, { status: 200 })
   } catch (error) {
     return NextResponse.json({ error: 'Failed to fetch data', details: error }, { status: 500 })
   }
 
-  return NextResponse.json(data, { status: 200 })
 }

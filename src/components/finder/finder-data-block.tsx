@@ -1,4 +1,5 @@
-import { FinderData, FinderDataType } from '@/app/api/finder-data/route'
+import { FinderDataType } from '@/lib/types'
+import { FinderData } from '@/lib/types'
 import Image from 'next/image'
 import { GoHash } from 'react-icons/go'
 import { FaVideo } from 'react-icons/fa'

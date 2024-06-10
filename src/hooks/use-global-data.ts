@@ -1,4 +1,4 @@
-import { FinderData } from '@/app/api/finder-data/route'
+import { FinderData } from '@/lib/types'
 import { FriendRequest, Profile } from '@prisma/client'
 import { create } from 'zustand'
 

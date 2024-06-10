@@ -1,9 +1,9 @@
 'use client'
 
-import { FinderData, FinderDataType } from '@/app/api/finder-data/route'
+import { FinderDataType, FinderData } from '@/lib/types'
 import { useGlobalData } from '@/hooks/use-global-data'
 import { EmptyFinder } from '@/lib/doodles'
-import { useEffect, useState } from 'react'
+import { createRef, useEffect, useState } from 'react'
 import Fuse from 'fuse.js'
 import { FinderDataBlock } from './finder-data-block'
 import { useFinder } from '@/hooks/use-finder'
@@ -20,6 +20,8 @@ export const Finder = () => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [openingSelectedTypePage, setOpeningSelectedTypePage] = useState(false)
   const router = useRouter()
+
+  const refs = result.map(() => createRef<HTMLDivElement>())
 
   useEffect(() => {
     setMounted(true)
@@ -141,10 +143,12 @@ export const Finder = () => {
     if (KEY === 'ArrowDown') {
       if (result.length > 0) {
         setActiveIndex(prev => (prev + 1) % result.length)
+        refs[(activeIndex + 1) % result.length].current?.scrollIntoView({ behavior: 'smooth' })
       }
     } else if (KEY === 'ArrowUp') {
       if (result.length > 0) {
         setActiveIndex(prev => (prev - 1 + result.length) % result.length)
+        refs[(activeIndex - 1 + result.length) % result.length].current?.scrollIntoView({ behavior: 'smooth' })
       }
     } else if (KEY === 'Enter') {
       openSelectedTypePage()
@@ -170,9 +174,10 @@ export const Finder = () => {
 
           {result.length > 0 && (
             <div>
-              <div className="space-y-1 max-h-[240px] overflow-y-auto" id='finderBlocks'>
+              <div className="space-y-1 max-h-[240px] overflow-y-auto" id="finderBlocks">
                 {result.map((data, index) => (
                   <FinderDataBlock
+                    ref={refs[index]}
                     data={data}
                     key={index}
                     selected={activeIndex === index}
