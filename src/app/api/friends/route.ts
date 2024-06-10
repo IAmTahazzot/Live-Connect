@@ -11,7 +11,6 @@ export const GET = async (req: NextRequest) => {
 
   const { id } = clerkUser
 
-  // find user id
   const user = await db.profile.findUnique({
     where: {
       userId: id,

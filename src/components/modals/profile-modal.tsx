@@ -8,11 +8,14 @@ import { TooltipProvider, TooltipTrigger, TooltipContent, Tooltip } from '@/comp
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { useGlobalData } from '@/hooks/use-global-data'
 
 export const ProfileModal = () => {
+  const { friends, friendRequests, syncFriendRequests } = useGlobalData()
   const { isOpen, close, type, data } = useModal()
   const isModalOpen = isOpen && type === MODAL_TYPES.PROFILE
   const [gettingConversationId, setGettingConversationId] = useState(false)
+  const [requesting, setRequesting] = useState(false)
   const router = useRouter()
 
   const [mounted, setMounted] = useState(false)
@@ -23,6 +26,8 @@ export const ProfileModal = () => {
 
   if (!mounted || !isModalOpen || !data) return null
 
+  // profile is the friend or clicked user profile
+  // currentUserId is the logged in user (your profile)
   const { profile, currentUserId, requestForbidden } = data as {
     profile: Profile
     currentUserId: string
@@ -65,12 +70,51 @@ export const ProfileModal = () => {
     }
   }
 
+  const sendRequest = async () => {
+    if (requesting) {
+      return toast.info('Requesting... Have some patience!')
+    }
+
+    try {
+      setRequesting(true)
+
+      const response = await fetch('/api/friends/request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          currentUserId,
+          friendId: profile.id,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        syncFriendRequests()
+        toast.success(data.message)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (err) {
+      toast.error('Failed to send friend request')
+    } finally {
+      setRequesting(false)
+    }
+  }
+
+  const isFriend =
+    friends.some(friend => friend.profile.id === profile.id) ||
+    friendRequests.pending.some(friendRequestData => friendRequestData.friend.id === profile.id) ||
+    friendRequests.requester.some(friendRequestData => friendRequestData.profile.id === profile.id)
+
   return (
     <div
       className="grid place-items-center fixed top-0 left-0 w-full h-full overflow-y-auto bg-black/75 z-[99]"
       onClick={close}>
       <div
-        className="w-[600px] mx-auto rounded-lg bounce-up bg-[#111214] overflow-hidden"
+        className="w-[600px] mx-auto rounded-lg bounce-up bg-[#111214]"
         id="profileModal"
         onClick={e => {
           e.stopPropagation()
@@ -79,27 +123,37 @@ export const ProfileModal = () => {
           className="empty-space-for-style bg-[#222427] h-[200px] p-4 flex justify-end items-start"
           style={{
             backgroundColor: `hsl(${Math.floor(Math.random() * 360)}, 100%, 70%)`,
+            borderRadius: '12px 12px 0 0',
           }}>
-          {!requestForbidden && (
+          {!requestForbidden && !isFriend && (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <button className="outline-0 flex items-center justify-center h-8 w-8 rounded-full bg-black/50">
-                    <svg
-                      aria-hidden="true"
-                      role="img"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="18"
-                      height="18"
-                      fill="none"
-                      viewBox="0 0 24 24">
-                      <path
-                        d="M19 14a1 1 0 0 1 1 1v3h3a1 1 0 0 1 0 2h-3v3a1 1 0 0 1-2 0v-3h-3a1 1 0 1 1 0-2h3v-3a1 1 0 0 1 1-1Z"
-                        fill="currentColor"></path>
-                      <path
-                        d="M16.83 12.93c.26-.27.26-.75-.08-.92A9.5 9.5 0 0 0 12.47 11h-.94A9.53 9.53 0 0 0 2 20.53c0 .81.66 1.47 1.47 1.47h.22c.24 0 .44-.17.5-.4.29-1.12.84-2.17 1.32-2.91.14-.21.43-.1.4.15l-.26 2.61c-.02.3.2.55.5.55h7.64c.12 0 .17-.31.06-.36C12.82 21.14 12 20.22 12 19a3 3 0 0 1 3-3h.5a.5.5 0 0 0 .5-.5V15c0-.8.31-1.53.83-2.07ZM12 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
-                        fill="currentColor"></path>
-                    </svg>
+                  <button
+                    className="outline-0 flex items-center justify-center h-8 w-8 rounded-full bg-black/50"
+                    onClick={e => {
+                      e.stopPropagation()
+                      sendRequest()
+                    }}>
+                    {!requesting ? (
+                      <svg
+                        aria-hidden="true"
+                        role="img"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        fill="none"
+                        viewBox="0 0 24 24">
+                        <path
+                          d="M19 14a1 1 0 0 1 1 1v3h3a1 1 0 0 1 0 2h-3v3a1 1 0 0 1-2 0v-3h-3a1 1 0 1 1 0-2h3v-3a1 1 0 0 1 1-1Z"
+                          fill="currentColor"></path>
+                        <path
+                          d="M16.83 12.93c.26-.27.26-.75-.08-.92A9.5 9.5 0 0 0 12.47 11h-.94A9.53 9.53 0 0 0 2 20.53c0 .81.66 1.47 1.47 1.47h.22c.24 0 .44-.17.5-.4.29-1.12.84-2.17 1.32-2.91.14-.21.43-.1.4.15l-.26 2.61c-.02.3.2.55.5.55h7.64c.12 0 .17-.31.06-.36C12.82 21.14 12 20.22 12 19a3 3 0 0 1 3-3h.5a.5.5 0 0 0 .5-.5V15c0-.8.31-1.53.83-2.07ZM12 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"
+                          fill="currentColor"></path>
+                      </svg>
+                    ) : (
+                      <div className="loader"></div>
+                    )}
                   </button>
                 </TooltipTrigger>
                 <TooltipContent className="z-[100]">Add to friends</TooltipContent>
