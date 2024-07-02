@@ -112,7 +112,7 @@ export const PendingRequests = () => {
     req.profile.name.toLowerCase().includes(query.toLowerCase())
   )
 
-  if (!filteredPendingRequests.length && !filteredRequesterRequests.length) {
+  if (!friendRequests.pending.length && !friendRequests.requester.length) {
     return (
       <div className="grid place-items-center h-full overflow-hidden">
         <div className="space-y-10  ">

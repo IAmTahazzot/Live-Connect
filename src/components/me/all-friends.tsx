@@ -97,7 +97,7 @@ export const AllFriends = () => {
 
   const filteredFriends = friends.filter(friend => friend.profile.name.toLowerCase().includes(query.toLowerCase()))
 
-  if (!filteredFriends.length) {
+  if (!friends.length) {
     return (
       <div className="grid place-items-center h-full overflow-hidden">
         <div className="space-y-10  ">
