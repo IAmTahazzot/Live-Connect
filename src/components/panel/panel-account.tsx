@@ -93,7 +93,7 @@ export const PanelAccount = ({ setActiveTab }: PanelAccountProps) => {
                     <div className="bg-emerald-500 h-4 w-4 rounded-full flex items-center justify-center">
                       <Hash size={12} className="text-black" />
                     </div>
-                    <span className="text-sm break-alls">{profile.userId}</span>
+                    <span className="text-sm break-all">{profile.userId}</span>
                   </div>
                 </div>
               </div>
