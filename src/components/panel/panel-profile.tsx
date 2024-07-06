@@ -86,7 +86,7 @@ export const PanelProfile = () => {
       <div className="animate-pulse">
         <h1 className="text-[20px] font-semibold mb-4">Profile</h1>
 
-        <div className="grid grid-cols-2 gap-x-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div>
             <div className="rounded-full bg-[hsla(var(--background-deep-dark),.3)] h-4 mb-2 w-24"></div>
             <div className="rounded-sm bg-[hsl(var(--background-deep-dark))] h-10"></div>
@@ -107,16 +107,12 @@ export const PanelProfile = () => {
     )
   }
 
-  if (!profile) {
-    return null
-  }
-
   return (
     <div>
       <h1 className="text-[20px] font-semibold mb-4">Profile</h1>
-      <div className="grid grid-cols-2 gap-x-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-10">
         <div>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="pb-10">
             <h2 className="uppercase font-semibold text-gray-400 text-xs tracking-wide mb-2">Name</h2>
             <input
               type="text"
@@ -161,10 +157,10 @@ export const PanelProfile = () => {
             </button>
           </form>
         </div>
-        <div>
+        <div className="row-start-1 col-start-1">
           <h2 className="uppercase font-semibold text-gray-400 text-xs tracking-wide mb-2">Preview</h2>
 
-          <div className="bg-[#232428] rounded-md overflow-hidden mb-16" id="profilePreview">
+          <div className="bg-[#232428] rounded-md overflow-hidden mb-10" id="profilePreview">
             <div className="bg-[#111214] h-[60px]"></div>
 
             <div className="px-4">

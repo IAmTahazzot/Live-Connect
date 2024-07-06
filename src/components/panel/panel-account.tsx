@@ -36,7 +36,7 @@ export const PanelAccount = ({ setActiveTab }: PanelAccountProps) => {
                     <div className="flex items-center gap-x-2 w-20 rounded-full h-5 px-2 bg-[hsl(var(--background-primary))]"></div>
                   </div>
                 </div>
-                <div>
+                <div className="hidden sm:block">
                   <div className="flex items-center px-4 text-sm font-medium bg-[#5865f2] hover:bg-[#505bd8] text-white h-8 w-24 rounded-full"></div>
                 </div>
               </div>
@@ -81,23 +81,23 @@ export const PanelAccount = ({ setActiveTab }: PanelAccountProps) => {
         <div className="bg-[hsl(var(--background-deep-dark))] rounded-md overflow-hidden">
           <div className="bg-[#2A2B32] h-[100px]"></div>
 
-          <div className="mb-10 px-4">
-            <div className="flex justify-between mt-6 mb-2">
+          <div className="mb-10 px-2 md:px-4">
+            <div className="flex flex-col md:flex-row justify-between mt-6 mb-2 gap-2">
               <div className="flex gap-x-3">
-                <div className="relative h-24 w-24 rounded-full overflow-hidden border-[6px] border-solid border-[hsl(var(--background-deep-dark))] -translate-y-12">
+                <div className="relative h-16 w-16 md:h-24 md:w-24 rounded-full overflow-hidden border-[6px] border-solid border-[hsl(var(--background-deep-dark))] -translate-y-12 shrink-0">
                   <Image src={profile.imageUrl} alt="User profile" fill priority={true} className="object-cover" />
                 </div>
-                <div className="space-y-2">
+                <div className="shrink-1 space-y-2">
                   <h2 className="text-[18px] font-semibold">{profile.name}</h2>
                   <div className="flex items-center gap-x-2 rounded-lg py-1 px-2 bg-[hsl(var(--background-primary))]">
                     <div className="bg-emerald-500 h-4 w-4 rounded-full flex items-center justify-center">
                       <Hash size={12} className="text-black" />
                     </div>
-                    <span className="text-sm">{profile.userId}</span>
+                    <span className="text-sm break-alls">{profile.userId}</span>
                   </div>
                 </div>
               </div>
-              <div>
+              <div className="shrink-0 pl-[75px] md:pl-0">
                 <button
                   className="flex items-center px-4 text-sm font-medium bg-[#5865f2] hover:bg-[#505bd8] text-white rounded-sm h-8"
                   onClick={() => {
@@ -111,7 +111,7 @@ export const PanelAccount = ({ setActiveTab }: PanelAccountProps) => {
               </div>
             </div>
 
-            <div className="bg-[hsl(var(--background-primary))] p-4 rounded-md space-y-6">
+            <div className="bg-[hsl(var(--background-primary))] p-4 rounded-md space-y-6 mt-5 md:mt-0 mx-3 md:mx-0">
               <div className="space-y-1">
                 <h2 className="uppercase font-semibold text-gray-400 text-xs tracking-wide">Display name</h2>
                 <h2>{profile.name}</h2>
@@ -137,7 +137,6 @@ export const PanelAccount = ({ setActiveTab }: PanelAccountProps) => {
           Deleting your account will remove all your data (profile, messages etc) from our servers and you will not be
           able to recover it.
         </p>
-
         <button
           className="text-sm font-medium bg-red-500 rounded-sm h-8 flex items-center justify-center text-white hover:bg-red-600 transition-colors duration-200 px-4 cursor-pointer my-4"
           onClick={() => setDeleteAccount(true)}>

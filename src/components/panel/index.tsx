@@ -94,15 +94,15 @@ export const Panel = () => {
         !unmount && 'anim-scale-back',
         unmount && 'anim-scale-up-and-fade'
       )}>
-      <div className="flex h-full">
-        <div className="flex-[1_0_240px] bg-[hsl(var(--background-secondary))]">
+      <div className="flex flex-col md:flex-row h-full">
+        <div className="flex-1 md:flex-[1_0_240px] bg-[hsl(var(--background-secondary))]">
           <div className="flex flex-[1_0_auto] justify-end h-full">
-            <nav className="flex flex-col w-[220px] h-full overflow-y-auto py-16 px-4 gap-2">
+            <nav className="flex flex-row md:flex-col w-full md:w-[220px] h-full overflow-y-auto py-3 md:py-16 px-4 gap-2">
               {navigations.map((nav, index) => (
                 <button
                   key={index}
                   className={cn(
-                    'flex items-center h-8 w-full p-2 text-base font-medium text-left rounded-sm hover:bg-[hsl(var(--background-modifier-selected)/.4)] hover:cursor-pointer transition-colors duration-200 ease-in-out',
+                    'flex items-center h-8 md:w-full p-2 text-base font-medium text-left rounded-sm hover:bg-[hsl(var(--background-modifier-selected)/.4)] hover:cursor-pointer transition-colors duration-200 ease-in-out',
                     activeTab.name === nav.name &&
                       'text-[hsl(var(--text-primary))] bg-[hsl(var(--background-modifier-selected)/.6)]',
                     activeTab.name !== nav.name && 'text-gray-400'
@@ -114,14 +114,14 @@ export const Panel = () => {
             </nav>
           </div>
         </div>
-        <div className="flex-[1_1_800px] bg-[hsl(var(--background-primary))]">
+        <div className="flex-[1_1_800px] bg-[hsl(var(--background-primary))] overflow-y-auto">
           <div
-            className="flex h-full"
+            className="flex h-full flex-col md:flex-row"
             style={{
               overflow: 'hidden auto',
             }}>
-            <div className="flex-1 max-w-[740px] py-16 px-10">{activeTab.component}</div>
-            <div className="py-16 text-center hover:opacity-50">
+            <div className="flex-1 w-full md:max-w-[740px] py-6 md:py-16 px-6 md:px-10">{activeTab.component}</div>
+            <div className="py-6 md:py-16 text-center hover:opacity-50 order-[-1] md:order-last w-[32px] ml-auto mr-6">
               <button
                 className="flex items-center justify-center border-2 rounded-full h-9 w-9 border-gray-400 border-solid"
                 onClick={closePanel}>
