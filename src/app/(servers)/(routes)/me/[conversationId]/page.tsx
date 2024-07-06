@@ -1,6 +1,6 @@
 import { ChatHeader } from '@/components/chat/chat-header'
+import { ChatHeaderForMe } from '@/components/chat/chat-header-for-me'
 import ChatInput from '@/components/chat/chat-input'
-import ChatMessages from '@/components/chat/chat-messages'
 import { UserMessages } from '@/components/chat/user-messages'
 import { currentProfile } from '@/lib/current-profile'
 import { db } from '@/lib/db'
@@ -23,7 +23,7 @@ export default async function UserConversationPage({ params }: { params: { conve
 
   return (
     <div className={'bg-white dark:bg-[hsl(var(--background-primary))] grid grid-rows-[50px,1fr,auto] h-full'}>
-      <ChatHeader
+      <ChatHeaderForMe
         type="conversation"
         name={secondUser?.name || 'unknown'}
         serverId={params.conversationId}

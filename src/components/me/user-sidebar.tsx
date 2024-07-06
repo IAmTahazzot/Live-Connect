@@ -18,9 +18,10 @@ type UserSidebarProps = {
     id: string
     recipient: Profile
   }[]
+  updateSidebarStatus?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const UserSidebar = ({ profile, conversations }: UserSidebarProps) => {
+export const UserSidebar = ({ profile, conversations, updateSidebarStatus }: UserSidebarProps) => {
   const [hydrated, setHydrated] = useState(false)
   const { open } = useFinder()
 
@@ -67,6 +68,7 @@ export const UserSidebar = ({ profile, conversations }: UserSidebarProps) => {
           }
           label={'Friends'}
           href={'/me'}
+          updateSidebarStatus={updateSidebarStatus}
         />
 
         <h3 className="mt-6 mb-3 font-sans text-[11px] text-[#949ba4] uppercase tracking-wider px-2 font-medium">
@@ -100,11 +102,13 @@ const SidebarItem = ({
   label,
   href,
   conversationId,
+  updateSidebarStatus,
 }: {
   imageOrIcon: string | React.ReactNode
   label: string
   href: string
   conversationId?: string
+  updateSidebarStatus?: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   const [deleting, setDeleting] = useState(false)
   const pathName = usePathname()
@@ -149,10 +153,13 @@ const SidebarItem = ({
     )
 
   return (
-    <Link
-      href={href}
+    <button
+      onClick={() => {
+        router.push(href)
+        updateSidebarStatus && updateSidebarStatus(false)
+      }}
       className={cn(
-        'flex items-center gap-3 rounded-sm px-3 py-[10px] bg-transparent hover:bg-[hsl(var(--background-modifier-selected)/.3)] cursor-pointer relative group',
+        'flex items-center gap-3 w-full rounded-sm px-3 py-[10px] bg-transparent hover:bg-[hsl(var(--background-modifier-selected)/.3)] cursor-pointer relative group',
         href === pathName && 'bg-[hsl(var(--background-modifier-selected)/.6)]'
       )}>
       {createVisual}
@@ -169,7 +176,7 @@ const SidebarItem = ({
           )}
         </div>
       )}
-    </Link>
+    </button>
   )
 }
 

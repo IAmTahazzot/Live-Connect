@@ -124,7 +124,7 @@ export const UserMessage = ({
         'relative group flex items-center hover:bg-[#2e3035] transition w-full px-4',
         isRapid ? 'py-[2px]' : 'py-1 mt-7'
       )}>
-      <div className="grid grid-cols-[40px,1fr] gap-x-4 group items-start w-full">
+      <div className="grid grid-cols-[32px,1fr] md:grid-cols-[40px,1fr] gap-x-4 group items-start w-full">
         <div onClick={onMemberClick} className={cn('cursor-pointer hover:drop-shadow-md transition')}>
           <UserAvatar src={profile.imageUrl} className={`${isRapid && 'hidden'}`} />
         </div>

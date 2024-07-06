@@ -30,7 +30,7 @@ export const ChatDispatchLoader = () => {
               const words = Math.floor(Math.random() * 9 + 1)
 
               return (
-                <div key={i} className="flex flex-wrap gap-x-1">
+                <div key={i} className="flex flex-wrap gap-1">
                   {Array.from({ length: words }).map((_, i) => {
                     return (
                       <div
@@ -63,7 +63,7 @@ export const ChatDispatchLoader = () => {
                 const words = Math.floor(Math.random() * 7 + 1)
 
                 return (
-                  <div key={i} className="flex flex-wrap gap-x-1">
+                  <div key={i} className="flex flex-wrap gap-1">
                     {Array.from({ length: words }).map((_, i) => {
                       return (
                         <div

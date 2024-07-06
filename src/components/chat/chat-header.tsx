@@ -2,7 +2,6 @@ import { Hash } from 'lucide-react'
 import { UserAvatar } from '@/components/user-avatar'
 import { MobileToggle } from '@/components/mobile-toggle'
 import SocketIndicator from '@/components/socket-indicator'
-import { currentUser } from '@clerk/nextjs'
 
 interface ChatHeaderProps {
   serverId: string
@@ -11,7 +10,7 @@ interface ChatHeaderProps {
   imageUrl?: string
 }
 
-export const ChatHeader = async ({ serverId, name, type, imageUrl = '' }: ChatHeaderProps) => {
+export const ChatHeader = ({ serverId, name, type, imageUrl = '' }: ChatHeaderProps) => {
   return (
     <div className="text-md font-semibold px-3 flex items-center h-12 border-neutral-200 dark:border-neutral-800 border-b-2">
       <MobileToggle serverId={serverId} />
@@ -19,9 +18,6 @@ export const ChatHeader = async ({ serverId, name, type, imageUrl = '' }: ChatHe
       {type === 'conversation' && imageUrl && <UserAvatar src={imageUrl} className="h-8 w-8 md:h-8 md:w-8 mr-2" />}
       <p className="font-semibold text-md text-black dark:text-white">{name}</p>
       <div className="ml-auto flex items-center">
-        {/*{type === "conversation" && (*/}
-        {/*    <ChatVideoButton />*/}
-        {/*)}*/}
         <SocketIndicator />
       </div>
     </div>

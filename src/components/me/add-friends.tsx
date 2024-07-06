@@ -93,20 +93,20 @@ export const AddFriends = () => {
   }
 
   return (
-    <div className="grid grid-cols-[1fr_350px] gap-4 h-full px-2 overflow-hidden">
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] gap-4 h-full px-2 overflow-hidden">
       <div className="px-4 py-6">
         <h3 className="uppercase font-semibold mb-1">Add Friend</h3>
         <p className="text-sm text-gray-400">You can add friends with their username.</p>
 
         <form method="POST" onSubmit={form.handleSubmit(findAndRequest)}>
           <div
-            className="grid grid-cols-[1fr_170px] items-center gap-2 bg-[hsl(var(--background-deep-dark))] rounded-md mt-4 h-[52px] px-3 border-[2px] border-solid"
+            className="grid grid-cols-1 md:grid-cols-[1fr_170px] items-center py-3 md:py-0 gap-2 bg-[hsl(var(--background-deep-dark))] rounded-md mt-4 md:h-[52px] px-3 border-[2px] border-solid"
             style={{
               borderColor: form.watch('keywords').length ? 'var(--color-primary)' : 'transparent',
             }}>
             <input
               type="text"
-              className="w-full h-full text-gray-200 bg-transparent font-medium"
+              className="w-full h-10 md:h-full text-gray-200 bg-transparent font-medium"
               placeholder="Try with username... (example: @mr_wumpus)"
               {...form.register('keywords')}
               autoComplete="off"
@@ -124,7 +124,7 @@ export const AddFriends = () => {
           </div>
         </form>
       </div>
-      <div className="border-l-[1px] border-solid border-zinc-600/50 px-4 py-6 h-full">
+      <div className="hidden lg:block border-l-[1px] border-solid border-zinc-600/50 px-4 py-6 h-full">
         <h3 className="font-medium text-gray-200 mb-2">Find friends</h3>
 
         <div className="overflow-y-auto h-full">

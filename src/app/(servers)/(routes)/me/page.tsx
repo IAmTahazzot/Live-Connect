@@ -7,6 +7,15 @@ import { useGlobalData } from '@/hooks/use-global-data'
 import { cn } from '@/lib/utils'
 import { useEffect, useState } from 'react'
 
+import { Menu } from 'lucide-react'
+
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Button } from '@/components/ui/button'
+import { NavigationSidebar } from '@/components/navigation/navigation-sidebar'
+import { ServerSidebar } from '@/components/server/server-sidebar'
+import { SmNavigationSidebar } from '@/components/sm-sidebar/sm-navigation-sidebar'
+import { SidebarForMe } from '@/components/sm-sidebar/sidebar-for-me'
+
 enum Tab {
   Empty,
   AllFriends,
@@ -16,7 +25,8 @@ enum Tab {
 
 export default function Home() {
   const [tab, setTab] = useState<Tab>(Tab.AllFriends)
-  const { syncAll } = useGlobalData()
+  const { syncAll, getAll } = useGlobalData()
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
   useEffect(() => {
     syncAll()
@@ -24,7 +34,13 @@ export default function Home() {
 
   return (
     <div className="grid grid-rows-[48px_1fr] bg-white dark:bg-[#313338] h-full">
-      <div className="flex items-center gap-4 py-2 px-4 slight-shadow">
+      <div className="flex items-center gap-4 py-2 px-4 slight-shadow scrollbar-hidden overflow-x-auto">
+        <div>
+          <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+            <Menu />
+          </Button>
+          {isSidebarOpen && <SidebarForMe updateSidebarStatus={setIsSidebarOpen} />}
+        </div>
         <div className="flex items-center gap-2">
           <div className="text-[#9da8b3]">
             <svg
@@ -62,7 +78,7 @@ export default function Home() {
         </button>
         <button
           className={cn(
-            'h-7 px-2 rounded-sm flex items-center justify-items-center outline-0 text-[#b7bdc4] hover:bg-[hsl(var(--background-modifier-selected)/.3)] font-medium',
+            'h-7 px-2 shrink-0 rounded-sm flex items-center justify-items-center outline-0 text-[#b7bdc4] hover:bg-[hsl(var(--background-modifier-selected)/.3)] font-medium',
             tab === Tab.AddFriends && 'bg-[hsl(var(--background-modifier-selected)/.6)] text-white'
           )}
           onClick={() => setTab(Tab.AddFriends)}>
@@ -73,7 +89,7 @@ export default function Home() {
       {tab === Tab.Empty && (
         <div className="grid place-items-center">
           <div>
-            <svg height="218" viewBox="0 0 421 218" width="421" xmlns="http://www.w3.org/2000/svg">
+            <svg height="218" viewBox="0 0 421 218" width="100%" xmlns="http://www.w3.org/2000/svg">
               <g fill="none" fillRule="evenodd">
                 <path
                   d="m0 125.6392c0 9.436 7.649 17.085 17.085 17.085h29.45c16.506 0 29.886 13.381 29.886 29.888 0 16.506 13.382 29.887 29.888 29.887h265.564c5.622 0 10.18-4.558 10.18-10.18v-.001c0-5.622-4.558-10.18-10.18-10.18h-31.161c-3.96 0-7.17-3.21-7.17-7.17v-.005c0-3.96 3.21-7.17 7.17-7.17h25.209c26.466 0 47.92-21.454 47.92-47.92 0-26.465-21.454-47.92-47.92-47.92h-51.401c-11.029 0-19.97-8.94-19.97-19.97v-.001c0-11.029-8.941-19.97-19.97-19.97h-195.43c-7.262 0-13.15 5.888-13.15 13.15v.006c0 7.263 5.888 13.15 13.15 13.15h14.65c13.872 0 25.117 11.245 25.117 25.117v.001c0 13.872-11.245 25.118-25.117 25.118h-76.715c-9.436 0-17.085 7.649-17.085 17.085"

@@ -115,9 +115,9 @@ export const PendingRequests = () => {
   if (!friendRequests.pending.length && !friendRequests.requester.length) {
     return (
       <div className="grid place-items-center h-full overflow-hidden">
-        <div className="space-y-10  ">
+        <div className="space-y-6 md:space-y-10 w-[85%] md:w-auto">
           <WumpusWalking />
-          <p className="text-gray-400 text-center">Huh? No pending requests?</p>
+          <p className="text-gray-400 text-center text-sm md:text-base">Huh? No pending requests?</p>
         </div>
       </div>
     )
@@ -125,7 +125,7 @@ export const PendingRequests = () => {
 
   return (
     <>
-      <div className="grid grid-cols-[1fr_350px] h-full overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_350px] h-full overflow-hidden">
         <div className="px-6 py-4 h-full overflow-hidden">
           <div className="grid grid-cols-[1fr_auto] rounded-sm overflow-hidden bg-[hsl(var(--background-deep-dark))] h-8 px-3">
             <input
@@ -204,7 +204,7 @@ export const PendingRequests = () => {
             </div>
           </div>
         </div>
-        <div className="grid place-items-center border-l-[1px] border-solid border-zinc-600/50 px-4 py-6 h-full">
+        <div className="hidden lg:grid place-items-center border-l-[1px] border-solid border-zinc-600/50 px-4 py-6 h-full">
           <div className="space-y-3">
             <WumpusSleeping />
             <p className="text-gray-500 text-sm text-center font-medium">This is where wumpus sleep...</p>

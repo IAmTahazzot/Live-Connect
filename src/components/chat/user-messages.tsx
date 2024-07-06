@@ -5,7 +5,7 @@ import ChatWelcome from '@/components/chat/chat-welcome'
 import { useChatQuery } from '@/hooks/use-chat-query'
 import { ImSpinner9 } from 'react-icons/im'
 import { LuServerCrash } from 'react-icons/lu'
-import { ElementRef, Fragment, useRef, useState } from 'react'
+import { ElementRef, Fragment, useEffect, useRef, useState } from 'react'
 import ChatItem from '@/components/chat/chat-item'
 import { format } from 'date-fns'
 import { useChatSocket } from '@/hooks/use-chat-socket'
@@ -40,6 +40,7 @@ export const UserMessages = ({
   paramValue,
   type,
 }: UserMessagesProps) => {
+  const [mounted, setMounted] = useState(false)
   const queryKey = `chat:${chatId}`
   const addKey = `chat:${chatId}:messages`
   const updateKey = `chat:${chatId}:messages:update`
@@ -71,11 +72,17 @@ export const UserMessages = ({
     count: data?.pages?.[0]?.items?.length ?? 0,
   })
 
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return <div></div>
+
   if (status === 'loading') {
     const dynamicLoaderCount = Math.floor(Math.random() * 10 + 5)
 
     return (
-      <div className="self-end px-4 h-full overflow-y-auto">
+      <div className="self-end px-4 h-full overflow-y-auto overflow-x-hidden">
         {Array.from({ length: dynamicLoaderCount }).map((_, i) => (
           <ChatDispatchLoader key={i} />
         ))}

@@ -17,7 +17,7 @@ export const UserBlock = ({ action, profile, currentUserId, requestForbidden }: 
   const { onOpen } = useModal()
 
   return (
-    <div className="grid grid-cols-[32px_1fr_auto] gap-3 items-center rounded-sm bg p-3 hover:bg-[hsl(var(--background-modifier-selected)/.3)] group">
+    <div className="grid grid-cols-[32px_1fr_auto] gap-3 items-center rounded-sm bg p-1 md:p-3 hover:bg-[hsl(var(--background-modifier-selected)/.3)] group">
       <div className="relative w-8 h-8 rounded-full bg-gray-300">
         <Image
           src={profile.imageUrl!}

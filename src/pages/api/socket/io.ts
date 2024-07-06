@@ -3,7 +3,6 @@ import { Server as IOServer, Socket } from 'socket.io'
 import { NextApiRequest } from 'next'
 
 import { NextApiResponseWithIO } from '@/pages/api/socket/socketTypes'
-import { getAuth } from '@clerk/nextjs/server'
 
 export const config = {
   api: {

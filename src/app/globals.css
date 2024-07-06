@@ -604,3 +604,7 @@ loader
 button {
   @apply select-none;
 }
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
