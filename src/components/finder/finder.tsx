@@ -158,14 +158,14 @@ export const Finder = () => {
   return (
     <div className="pt-32 fixed top-0 left-0 w-full h-full overflow-y-auto bg-black/75 z-[99]" onClick={close}>
       <div
-        className="w-[550px] mx-auto rounded-lg bounce-up bg-[#2b2d31] overflow-hidden px-5"
+        className="w-11/12 sm:w-9/12 max-w-[550px] mx-auto rounded-lg bounce-up bg-[#2b2d31] overflow-hidden px-5"
         id="finder"
         onClick={e => {
           e.stopPropagation()
         }}>
         <main>
           <input
-            className="bg-[#111214c2] h-[70px] px-3 rounded-sm my-5 w-full text-xl text-gray-200 placeholder:text-zinc-400/60"
+            className="bg-[#111214c2] h-[46px] md:h-[70px] px-3 rounded-sm my-5 w-full text-xl text-gray-200 placeholder:text-zinc-400/60"
             placeholder="Where would you like to go?"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)}
             onKeyDown={handleArrowKey}
