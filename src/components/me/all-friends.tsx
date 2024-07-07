@@ -23,14 +23,14 @@ export const AllFriends = () => {
     setFriends(allFriends)
   }, [allFriends, profile])
 
-  if (!profile) {
+  if (!profile || !friends) {
     return (
-      <div className="grid grid-cols-[1fr_350px] h-full overflow-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_350px] h-full overflow-hidden">
         <div className="px-6 py-4 h-full overflow-hidden">
           <div className="h-8 bg-[hsl(var(--background-modifier-selected)/.3)] rounded-full mx-4 my-2 animate-pulse"></div>
           <PendingBlockLoader clone={15} />
         </div>
-        <div className="grid place-items-center border-l-[1px] border-solid border-zinc-600/50 px-4 py-6 h-full">
+        <div className="hidden md:grid place-items-center border-l-[1px] border-solid border-zinc-600/50 px-4 py-6 h-full">
           <div className="space-y-3">
             <WumpusSleeping />
             <p className="text-gray-500 text-sm text-center">This is where wumpus sleep...</p>

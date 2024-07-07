@@ -72,7 +72,7 @@ const CreateServerModal = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
-      <DialogContent className="bg-[hsl(var(--background-primary))] text-white p-0 overflow-hidden max-w-[440px] rounded-[5px] dark:bg-chat">
+      <DialogContent className="bg-[hsl(var(--background-primary))] text-white p-0 overflow-hidden w-[95%] sm:max-w-[440px] rounded-[5px] dark:bg-chat">
         <DialogHeader className="pt-5 px-4">
           <DialogTitle className="text-2xl text-center font-bold">Customize your server</DialogTitle>
           <DialogDescription className="text-center text-sm text-zinc-600 dark:text-gray-200">

@@ -99,7 +99,7 @@ const CreateChannelModal = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
-      <DialogContent className="bg-white text-black dark:bg-[#313338] dark:text-[#C4C9CE] p-0 overflow-hidden max-w-[450px] rounded-[5px]">
+      <DialogContent className="bg-white text-black dark:bg-[#313338] dark:text-[#C4C9CE] p-0 overflow-hidden w-[95%] sm:max-w-[450px] rounded-[5px]">
         <DialogHeader className="pt-5 px-4">
           <DialogTitle className="text-2xl dark:text-slate-200 font-medium">Create a Channel</DialogTitle>
         </DialogHeader>
@@ -118,7 +118,7 @@ const CreateChannelModal = () => {
                   <Hash size={20} className="text-white dark:text-white" />
                   <div className="justify-self-start pl-1">
                     <h3 className="text-white">Text</h3>
-                    <p className="text-sm text-ellipsis whitespace-nowrap overflow-hidden">
+                    <p className="hidden sm:block text-sm text-ellipsis whitespace-nowrap overflow-hidden">
                       Send messages, images, GIFs, emoji, opinions and puns
                     </p>
                   </div>
@@ -135,7 +135,7 @@ const CreateChannelModal = () => {
                   <MicIcon size={20} className="text-white dark:text-white" />
                   <div className="justify-self-start pl-1">
                     <h3 className="text-white">Voice</h3>
-                    <p className="text-sm text-ellipsis whitespace-nowrap overflow-hidden">
+                    <p className="hidden sm:block text-sm text-ellipsis whitespace-nowrap overflow-hidden">
                       Hang out together with voice, video and screen sharing
                     </p>
                   </div>
@@ -152,7 +152,7 @@ const CreateChannelModal = () => {
                   <VideoIcon size={20} className="text-white dark:text-white" />
                   <div className="justify-self-start pl-1">
                     <h3 className="text-white">Video</h3>
-                    <p className="text-sm text-ellipsis whitespace-nowrap overflow-hidden">
+                    <p className="hidden sm:block text-sm text-ellipsis whitespace-nowrap overflow-hidden">
                       Face time with your friends, family and colleagues
                     </p>
                   </div>

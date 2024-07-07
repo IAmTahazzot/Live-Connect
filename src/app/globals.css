@@ -157,7 +157,9 @@ textarea:-webkit-autofill:hover {
     --accent: 235, 86%, 65%;
     --accent-foreground: 0, 0%, 90%;
 
-    --destructive: 0 62.8% 30.6%;
+    /* --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 60 9.1% 97.8%; */
+    --destructive: 0 73% 38%;
     --destructive-foreground: 60 9.1% 97.8%;
 
     --border: 12 6.5% 15.1%;

@@ -114,13 +114,13 @@ export const ProfileModal = () => {
       className="grid place-items-center fixed top-0 left-0 w-full h-full overflow-y-auto bg-black/75 z-[99]"
       onClick={close}>
       <div
-        className="w-[600px] mx-auto rounded-lg bounce-up bg-[#111214]"
+        className="w-[95%] sm:w-[600px] mx-auto rounded-lg bounce-up bg-[#111214]"
         id="profileModal"
         onClick={e => {
           e.stopPropagation()
         }}>
         <div
-          className="empty-space-for-style bg-[#222427] h-[200px] p-4 flex justify-end items-start"
+          className="empty-space-for-style bg-[#222427] h-[100px] sm:h-[200px] p-4 flex justify-end items-start"
           style={{
             backgroundColor: `hsl(${Math.floor(Math.random() * 360)}, 100%, 70%)`,
             borderRadius: '12px 12px 0 0',

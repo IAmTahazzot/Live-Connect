@@ -77,7 +77,7 @@ const MessageFileModal = () => {
 
     return (
         <Dialog open={isModalOpen} onOpenChange={handleClose}>
-            <DialogContent className="bg-white text-black dark:bg-[#313338] dark:text-[#C4C9CE] p-0 overflow-hidden max-w-[440px] rounded-[5px]">
+            <DialogContent className="bg-white text-black dark:bg-[#313338] dark:text-[#C4C9CE] p-0 overflow-hidden w-[95%] sm:max-w-[440px] rounded-[5px]">
                 <DialogHeader className="pt-5 px-4">
                     <DialogTitle className="text-2xl text-center font-bold">
                         Upload file
