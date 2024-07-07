@@ -13,6 +13,7 @@ import { Track } from 'livekit-client'
 import { useEffect, useState } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { Logger } from './logger'
+import { LuTimerOff } from 'react-icons/lu'
 
 type ChannelRoomProps = {
   channelId: string
@@ -23,6 +24,8 @@ type ChannelRoomProps = {
 export const ChannelRoom = ({ channelId, video, audio }: ChannelRoomProps) => {
   const { user, isLoaded } = useUser()
   const [token, setToken] = useState('')
+  const [isTimeout, setIsTimeout] = useState(false)
+
   const room = channelId
 
   useEffect(() => {
@@ -41,18 +44,43 @@ export const ChannelRoom = ({ channelId, video, audio }: ChannelRoomProps) => {
         console.error(e)
       }
     })()
+
+    // disconnect from the room when the component unmounts and after 20 seconds
+    return () => {
+      setTimeout(() => {
+        setToken('')
+        setIsTimeout(true)
+      }, 1000 * 20) // 20 seconds
+    }
   }, [user])
 
   if (!isLoaded) {
-    return <div>Getting user data</div>
+    return <div className="grid place-items-center p-2">Getting user data...</div>
+  }
+
+  if (isTimeout) {
+    return (
+      <div className="grid place-items-center p-2">
+        <div className="space-y-4 w-[90%] sm:max-w-[600px]">
+          <LuTimerOff className="text-gray-500 mx-auto" size={72} />
+          <div className="text-gray-400 text-sm text-center">
+            This prototype is designed to offer a maximum session duration of 5 minutes due to the high operational
+            costs involved. This duration is deemed sufficient for users to familiarize themselves with the
+            feature&apos;s functionality. For deployment in a production environment, the session duration can be
+            adjusted according to requirements. You may explore other features of the app or refresh the page to start a
+            new session.
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (!user) {
-    return <div>Not logged in</div>
+    return <div className="grid place-items-center p-2">Unexpected s**t happened, try to refresh to login again.</div>
   }
 
   if (token === '') {
-    return <div>Getting token...</div>
+    return <div className="grid place-items-center p-2">Getting token...</div>
   }
 
   return (
