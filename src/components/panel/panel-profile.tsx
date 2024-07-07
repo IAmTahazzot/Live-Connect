@@ -110,7 +110,7 @@ export const PanelProfile = () => {
   return (
     <div>
       <h1 className="text-[20px] font-semibold mb-4">Profile</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-10">
         <div>
           <form onSubmit={form.handleSubmit(onSubmit)} className="pb-10">
             <h2 className="uppercase font-semibold text-gray-400 text-xs tracking-wide mb-2">Name</h2>
@@ -157,7 +157,8 @@ export const PanelProfile = () => {
             </button>
           </form>
         </div>
-        <div className="row-start-1 col-start-1">
+
+        <div className="row-start-1 col-start-1 md:col-start-2">
           <h2 className="uppercase font-semibold text-gray-400 text-xs tracking-wide mb-2">Preview</h2>
 
           <div className="bg-[#232428] rounded-md overflow-hidden mb-10" id="profilePreview">

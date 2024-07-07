@@ -121,7 +121,7 @@ export const Panel = () => {
               overflow: 'hidden auto',
             }}>
             <div className="flex-1 w-full md:max-w-[740px] py-6 md:py-16 px-6 md:px-10">{activeTab.component}</div>
-            <div className="pt-4 pb-0 md:py-16 text-center hover:opacity-50 order-[-1] md:order-last w-[32px] ml-auto mr-6">
+            <div className="pt-4 pb-0 md:py-16 text-center hover:opacity-50 order-[-1] md:order-last w-[32px] ml-auto md:ml-0 mr-6">
               <button
                 className="flex items-center justify-center border-2 rounded-full h-9 w-9 border-gray-400 border-solid"
                 onClick={closePanel}>
