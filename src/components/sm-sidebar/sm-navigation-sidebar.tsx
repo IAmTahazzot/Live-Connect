@@ -10,7 +10,18 @@ export const SmNavigationSidebar = () => {
   const { profile, servers } = useGlobalData()
 
   if (!profile || !servers) {
-    return null
+    return (
+      <>
+        <div className={'left-0 h-full w-[72px] z-30 flex-col fixed inset-y-0'}>
+          <div
+            className={
+              'space-y-2 flex flex-col items-center h-full text-primary w-full bg-[#e3e5e8] dark:bg-[#1E1F22] py-3'
+            }>
+            <NavigationAction />
+          </div>
+        </div>
+      </>
+    )
   }
 
   return (

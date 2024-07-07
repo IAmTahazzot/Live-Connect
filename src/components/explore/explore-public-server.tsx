@@ -1,13 +1,17 @@
 'use client'
 
 import { Member, Server } from '@prisma/client'
+import { Menu } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
+import { Button } from '../ui/button'
+import { SidebarForExplore } from '../sm-sidebar/sidebar-for-explore'
 
 export const ExplorePublicServer = () => {
   const [hydrated, setHydrated] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [serverCollection, setServerCollection] = useState<(Server & { members: Member[] })[]>([])
   const [userServerCollection, setUserServerCollection] = useState<Server[]>([])
   const [searchTerm, setSearchTerm] = useState('')
@@ -82,12 +86,20 @@ export const ExplorePublicServer = () => {
   }
 
   return (
-    <div className="max-w-[1200px] mx-auto px-8 py-6 overflow-y-auto h-full">
+    <div className="max-w-[1200px] mx-auto px-3 sm:px-8 sm:py-6 overflow-y-auto h-full">
+      <Button
+        variant={'ghost'}
+        size="icon"
+        className="block md:hidden my-3"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+        <Menu />
+      </Button>
+
+      {isSidebarOpen && <SidebarForExplore updateSidebarStatus={setIsSidebarOpen} />}
+
       <div className="relative grid place-items-center h-[300px] w-full rounded-md overflow-hidden mb-8">
         <div className="absolute z-10 w-4/6 p-10">
-          <h1 className="text-center mb-4 text-2xl font-semibold">
-            Those aren&apos;t servers, those are communities.
-          </h1>
+          <h1 className="text-center mb-4 text-2xl font-semibold">Those aren&apos;t servers, those are communities.</h1>
           <input
             type="text"
             placeholder="Search for servers"

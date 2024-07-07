@@ -1,9 +1,14 @@
-import { currentProfile } from '@/lib/current-profile'
+'use client'
+
 import { ServerFooter } from '../server/server-footer'
 import { useEffect, useState } from 'react'
 import { Profile } from '@prisma/client'
 
-export const ExploreSidebar = () => {
+export const ExploreSidebar = ({
+  updateSidebarStatus,
+}: {
+  updateSidebarStatus?: React.Dispatch<React.SetStateAction<boolean>>
+}) => {
   const [profile, setProfile] = useState<Profile>()
 
   useEffect(() => {
@@ -30,7 +35,13 @@ export const ExploreSidebar = () => {
       <div className="flex-1 p-2">
         <h1 className="text-2xl font-semibold mb-2 px-2">Discover</h1>
 
-        <button className="grid grid-cols-[40px_1fr] w-full rounded-sm py-[10px] px-2 bg-[var(--color-primary)] cursor-pointer">
+        <button
+          className="grid grid-cols-[40px_1fr] w-full rounded-sm py-[10px] px-2 bg-[var(--color-primary)] cursor-pointer"
+          onClick={() => {
+            if (updateSidebarStatus) {
+              updateSidebarStatus(false)
+            }
+          }}>
           <div>
             <svg
               aria-hidden="true"
