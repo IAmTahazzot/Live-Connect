@@ -11,6 +11,7 @@ import { PanelProvider } from '@/components/providers/panel-provider'
 import { Toaster } from '@/components/ui/sonner'
 import { NetworkProvider } from '@/components/providers/network'
 import { Finder } from '@/components/finder/finder'
+import { GlobalDataProvider } from '@/components/providers/global-data-provider'
 
 export const metadata: Metadata = {
   title: 'LC (Live Connect)',
@@ -25,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <NetworkProvider>
             <ThemeProvider attribute={'class'} defaultTheme={'dark'} enableSystem={false} storageKey={'__THEME'}>
               <SocketProvider>
+                <GlobalDataProvider />
                 <Finder />
                 <ModalProvider />
                 <PanelProvider />

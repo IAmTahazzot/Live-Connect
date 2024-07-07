@@ -3,7 +3,6 @@
 import { AddFriends } from '@/components/me/add-friends'
 import { AllFriends } from '@/components/me/all-friends'
 import { PendingRequests } from '@/components/me/pending-requests'
-import { useGlobalData } from '@/hooks/use-global-data'
 import { cn } from '@/lib/utils'
 import { useEffect, useState } from 'react'
 
@@ -25,12 +24,7 @@ enum Tab {
 
 export default function Home() {
   const [tab, setTab] = useState<Tab>(Tab.AllFriends)
-  const { syncAll, getAll } = useGlobalData()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-
-  useEffect(() => {
-    syncAll()
-  }, [])
 
   return (
     <div className="grid grid-rows-[48px_1fr] bg-white dark:bg-[#313338] h-full">
