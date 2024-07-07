@@ -47,10 +47,12 @@ export const ChannelRoom = ({ channelId, video, audio }: ChannelRoomProps) => {
 
     // disconnect from the room when the component unmounts and after 20 seconds
     return () => {
+      const TIMEOUT = 1000 * 60 * 5 // 5 minutes
+
       setTimeout(() => {
         setToken('')
         setIsTimeout(true)
-      }, 1000 * 20) // 20 seconds
+      }, TIMEOUT)
     }
   }, [user])
 

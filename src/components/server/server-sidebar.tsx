@@ -1,14 +1,12 @@
 import { currentProfile } from '@/lib/current-profile'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
-import { $Enums } from '.prisma/client'
 import { ServerHeader } from '@/components/server/server-header'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import ServerSection from '@/components/server/server-section'
 import { ServerChannel } from '@/components/server/server-channel'
-import { ServerMember } from '@/components/server/server-member'
 import { ServerFooter } from './server-footer'
-import ChannelType = $Enums.ChannelType
+import { ChannelType } from '@prisma/client'
 
 interface ServerSidebarProps {
   serverId: string
@@ -49,7 +47,6 @@ export const ServerSidebar = async ({ serverId }: ServerSidebarProps) => {
   const textChannels = server.channels.filter(channel => channel.type === ChannelType.TEXT)
   const audioChannels = server.channels.filter(channel => channel.type === ChannelType.AUDIO)
   const videoChannels = server.channels.filter(channel => channel.type === ChannelType.VIDEO)
-  const members = server.members.filter(member => member.profileId !== profile.id)
   const role = server.members.find(member => member.profileId === profile.id)?.role
 
   return (
